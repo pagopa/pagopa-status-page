@@ -1,6 +1,10 @@
-const apim_d = "https://api.dev.platform.pagopa.it";
-const apim_u = "https://api.uat.platform.pagopa.it";
-const apim_p = "https://api.platform.pagopa.it";
+const dns_d = ".dev.platform.pagopa.it";
+const dns_u = ".uat.platform.pagopa.it";
+const dns_p = ".platform.pagopa.it";
+
+const apim_d = "https://api${dns_d}";
+const apim_u = "https://api${dns_u}";
+const apim_p = "https://api${dns_p}";
 
 const basePath = "/shared/statuspage/v1/info?product=";
 
@@ -10,6 +14,12 @@ const projectsCore = {
     "product": "apiconfig",
     "repository": "pagopa-api-config",
     "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=581",
+  },
+  "ApiConfig - FE": {
+    "type": "frontend",
+    "host": "config",
+    "repository": "pagopa-api-config-fe",
+    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=577",
   },
   "AFM-Calculator": {
     "product": "afmcalculator",

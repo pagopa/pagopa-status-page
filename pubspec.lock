@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  chaleno:
+    dependency: "direct main"
+    description:
+      name: chaleno
+      sha256: d4732915d065c634a7ec13f4c50efbef4815dceb9c3dc50c6d340252e1c7e1a6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6"
   characters:
     dependency: transitive
     description:
@@ -232,13 +240,5 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  web_scraper:
-    dependency: "direct main"
-    description:
-      name: web_scraper
-      sha256: "34d41de25c1aaeeca2cd91c1d062ee3126f59db6c84ec32da17d44d082ecc177"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.4"
 sdks:
   dart: ">=2.18.0 <4.0.0"

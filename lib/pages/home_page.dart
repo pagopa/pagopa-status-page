@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/pages/status_page.dart';
-import 'package:web_scraper/web_scraper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
