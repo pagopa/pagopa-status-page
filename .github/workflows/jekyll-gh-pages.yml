@@ -1,5 +1,4 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+name: Deploy GitHub Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -31,7 +30,7 @@ jobs:
         # from https://github.com/actions/checkout/commits/main
         uses: actions/checkout@1f9a0c22da41e6ebfa534300ef656657ea2c6707
 
-      - name: Flutter action
+      - name: Flutter action ⬇️
         uses: subosito/flutter-action@v2.10.0
         with:
           channel: 'stable'
