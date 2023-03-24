@@ -24,6 +24,7 @@ jobs:
   # Build job
   deploy:
     runs-on: ubuntu-latest
+    environment: github-pages
     steps:
       - name: Checkout 🛎️
         id: checkout
