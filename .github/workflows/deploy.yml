@@ -1,0 +1,35 @@
+name: Deploy
+
+# Controls when the workflow will run
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        id: checkout
+        # from https://github.com/actions/checkout/commits/main
+        uses: actions/checkout@1f9a0c22da41e6ebfa534300ef656657ea2c6707
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2.10.0
+        with:
+          channel: 'stable'
+
+      - name: Build 🔧
+        run: flutter build web --base-href /pagopa-status-page/
+
+#      - run: cp -Rv ./build/web/* ./docs/
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build/web/
+
