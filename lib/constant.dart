@@ -11,11 +11,6 @@ const projectsCore = {
     "repository": "pagopa-api-config",
     "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=581",
   },
-  "ApiConfig - FE": {
-    "product": "", // TODO FE
-    "repository": "pagopa-api-config-fe",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=577",
-  },
   "AFM-Calculator": {
     "product": "afmcalculator",
     "repository": "pagopa-afm-calculator",
@@ -45,6 +40,11 @@ const projectsCore = {
     "product": "gpdpayments",
     "repository": "pagopa-gpd-payments",
     "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=982",
+  },
+  "GPD - Reporting Orgs Enrollment": {
+    "product": "gpdenrollment",
+    "repository": "pagopa-gpd-reporting-orgs-enrollment",
+    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=846",
   },
   "GPS - Donations": {
     "product": "gpsdonation",
