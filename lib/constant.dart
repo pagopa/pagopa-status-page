@@ -46,6 +46,11 @@ const projectsCore = {
     "repository": "pagopa-gpd-payments",
     "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=982",
   },
+  "GPD - Reporting Orgs Enrollment": {
+    "product": "gpdenrollment",
+    "repository": "pagopa-gpd-reporting-orgs-enrollment",
+    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=846",
+  },
   "GPS - Donations": {
     "product": "gpsdonation",
     "repository": "pagopa-gps-donation-service",
