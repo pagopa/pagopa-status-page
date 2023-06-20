@@ -87,7 +87,7 @@ const projectsCore = {
   },
   "GPD - Reporting Orgs Enrollment": {
     "product": "gpdenrollment",
-    "repository": "pagopa-gpd-reporting-orgs-enrollment",
+    "repository": "pagopa-reporting-orgs-enrollment",
     "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=846",
   },
   /* TODO un-comment this when response will be compliant
