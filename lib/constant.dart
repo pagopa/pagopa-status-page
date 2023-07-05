@@ -49,21 +49,21 @@ const projectsCore = {
   "AFM-Calculator": {
     "product": "afmcalculator",
     "repository": "pagopa-afm-calculator",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=800",
+    "pipeline": "https://github.com/pagopa/pagopa-afm-calculator/actions/workflows/release_deploy.yml",
     "env": "AKS",
     "actions": "GHA"
   },
   "AFM-Utils": {
     "product": "afmutils",
     "repository": "pagopa-afm-utils",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=929",
+    "pipeline": "https://github.com/pagopa/pagopa-afm-utils/actions/workflows/release_deploy.yml",
     "env": "AKS",
     "actions": "GHA"
   },
   "AFM-Marketplace": {
     "product": "afmmarketplace",
     "repository": "pagopa-afm-marketplace-be",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=801",
+    "pipeline": "https://github.com/pagopa/pagopa-afm-marketplace-be/actions/workflows/release_deploy.yml",
     "env": "AKS",
     "actions": "GHA"
   },
@@ -109,7 +109,7 @@ const projectsCore = {
   "GPD - Payments": {
     "product": "gpdpayments",
     "repository": "pagopa-gpd-payments",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=982",
+    "pipeline": "https://github.com/pagopa/pagopa-gpd-payments/actions/workflows/release_deploy.yml",
     "env": "AKS",
     "actions": "GHA"
   },
@@ -147,28 +147,12 @@ const projectsCore = {
     "type": "frontend",
     "host": "mocker",
     "repository": "pagopa-mock-config-fe",
-    "pipeline": "",
+    "pipeline": https://github.com/pagopa/pagopa-mock-config-fen/actions/workflows/release_deploy.yml,
     "env": "AZ",
     "actions": "GHA"
   }, 
-  /* TODO un-comment this when response will be compliant
-  "PDF Engine": {
-    "product": "pdfengine",
-    "repository": "pagopa-pdf-engine",
-    "pipeline": "https://github.com/pagopa/pagopa-pdf-engine/actions/workflows/release-deploy.yml",
-    "env": "AKS",
-    "actions": "GHA"
-  },
-  */
-  /* TODO un-comment this when response will be compliant
-  "Receipts - PDF Datastore": {
-    "product": "receiptpdfdatastore",
-    "repository": "pagopa-receipt-pdf-datastore",
-    "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-datastore/actions/workflows/release-deploy.yml",
-    "env": "AKS",
-    "actions": "GHA"
-  },  
-  */
+  /*https://github.com/pagopa/pagopa-api-config-selfcare-integration/actions/workflows/release_deploy.yml*/
+  /*https://github.com/pagopa/tps://github.com/pagopa/pagopa-api-config-selfcare-integration/actions/workflows/release_deploy.yml/actions/workflows/release_deploy.yml*/
 };
 
 const projectsTouchPoint = {
