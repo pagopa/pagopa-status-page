@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'dart:html' as html;
 
+import 'package:chaleno/chaleno.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:statuspage/constant.dart';
-import 'package:chaleno/chaleno.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StatusPage extends StatefulWidget {
   const StatusPage({Key? key, this.projects}) : super(key: key);
@@ -32,10 +33,18 @@ class StatusPageState extends State<StatusPage> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 32.0),
         child: Table(
+          columnWidths: {
+            0: FlexColumnWidth(2),
+            1: FlexColumnWidth(1),
+            2: FlexColumnWidth(1),
+            3: FlexColumnWidth(1),
+            4: FlexColumnWidth(2),
+          },
           defaultColumnWidth: const FlexColumnWidth(),
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           border: const TableBorder(
-              horizontalInside: BorderSide(width: 1, color: Colors.black12, style: BorderStyle.solid)),
+              horizontalInside: BorderSide(
+                  width: 1, color: Colors.black12, style: BorderStyle.solid)),
           children: [
             TableRow(children: buildHeader()),
             ...buildRows(),
@@ -55,31 +64,61 @@ class StatusPageState extends State<StatusPage> {
         buildCell("DEV", value),
         buildCell("UAT", value),
         buildCell("PROD", value),
-        Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: ElevatedButton(
-              onPressed: () {
-                html.window.open(value['pipeline']!, "new tab");
-              },
-              child: const Text('Deploy', style: TextStyle(color: Colors.white)),
-            ))
+        buildLinkCell(value)
       ], decoration: const BoxDecoration(color: Colors.white)));
     });
     return rows;
   }
 
-  Padding buildNameCell(name, value) {
+  Widget buildLinkCell(project) {
+    return Center(
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+      IconButton(
+          tooltip: 'repository',
+          icon: FaIcon(FontAwesomeIcons.github),
+          onPressed: () {
+            launch('https://github.com/pagopa/${project['repository']}');
+          }),
+      IconButton(
+          tooltip: 'deploy pipeline',
+          icon: FaIcon(
+            FontAwesomeIcons.rocket,
+            color: Colors.red[400],
+          ),
+          onPressed: () {
+            launch('${project['pipeline']}');
+          }),
+      IconButton(
+
+          tooltip: 'dashboard',
+          icon: FaIcon(
+            FontAwesomeIcons.chartLine,
+            color: Colors.blue,
+          ),
+          onPressed: () {
+            launch('https://portal.azure.com/#@pagopait.onmicrosoft.com/dashboard/arm/subscriptions/b9fc9419-6097-45fe-9f74-ba0641c91912/resourceGroups/dashboards/providers/Microsoft.Portal/dashboards/pagopa-p-opex_${project['repository']}');
+          }),
+    ]));
+  }
+
+  Padding buildNameCell(name, project) {
     return Padding(
       padding: const EdgeInsets.only(left: 32.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            name,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
+          Row(children: [
+            Text(
+              name,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            buildLabelEnv(project),
+            buildLabelPipe(project),
+          ]),
           FutureBuilder(
-            future: fetchRelease(value['repository']),
+            future: fetchRelease(project['repository']),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Padding(
@@ -90,12 +129,48 @@ class StatusPageState extends State<StatusPage> {
                 return Text('${snapshot.error}');
               }
               // By default, show a loading spinner.
-              return const SizedBox(height: 20, width: 20, child: CircularProgressIndicator());
+              return const SizedBox(
+                  height: 20, width: 20, child: CircularProgressIndicator());
             },
           )
         ],
       ),
     );
+  }
+
+  Padding buildLabelPipe(project) {
+    return Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Chip(
+          backgroundColor:
+              project['actions'] == 'GHA' ? Colors.black54 : Colors.blue[100],
+          label: Text(
+            project['actions'] ?? 'TODO',
+            style: TextStyle(
+                color: project['actions'] == 'GHA'
+                    ? Colors.white
+                    : Colors.blue[500],
+                fontWeight: FontWeight.bold),
+          ),
+        ));
+  }
+
+  Padding buildLabelEnv(project) {
+    return Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Chip(
+          backgroundColor: project['env'] == 'AKS'
+              ? Colors.deepPurple[100]
+              : Colors.blue[100],
+          label: Text(
+            project['env'] ?? 'TODO',
+            style: TextStyle(
+                color: project['env'] == 'AKS'
+                    ? Colors.deepPurple[500]
+                    : Colors.blue[500],
+                fontWeight: FontWeight.bold),
+          ),
+        ));
   }
 
   buildHeader() {
@@ -132,13 +207,13 @@ class StatusPageState extends State<StatusPage> {
         padding: EdgeInsets.all(8.0),
         child: Center(
             child: Text(
-          "Pipeline",
+          "Link Utili",
         )),
       ),
     ];
   }
 
-  FutureBuilder buildCell(env, product) {
+  Widget buildCell(env, product) {
     if (product["type"] == "frontend") {
       return buildCellFE(env, product);
     } else {
@@ -177,8 +252,10 @@ class StatusPageState extends State<StatusPage> {
         builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
           late List<Widget> children;
           if (snapshot.hasData) {
-            if (snapshot.data?.statusCode == 200 && snapshot.data!.bodyBytes.isNotEmpty) {
-              children = buildOk(jsonDecode(snapshot.data!.body)['version'] ?? 'No Info Version');
+            if (snapshot.data?.statusCode == 200 &&
+                snapshot.data!.bodyBytes.isNotEmpty) {
+              children = buildOk(jsonDecode(snapshot.data!.body)['version'] ??
+                  'No Info Version');
             } else {
               if (snapshot.data!.bodyBytes.isEmpty) {
                 children = buildError('Empty Body');
@@ -265,7 +342,6 @@ class StatusPageState extends State<StatusPage> {
     if (env == 'PROD') {
       url = url + dns_p;
     }
-
 
     var parser = await Chaleno().load(url);
     // TODO react application are javascript dynamic built
