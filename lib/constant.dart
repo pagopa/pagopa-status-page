@@ -147,7 +147,7 @@ const projectsCore = {
     "type": "frontend",
     "host": "mocker",
     "repository": "pagopa-mock-config-fe",
-    "pipeline": https://github.com/pagopa/pagopa-mock-config-fen/actions/workflows/release_deploy.yml,
+    "pipeline": "https://github.com/pagopa/pagopa-mock-config-fen/actions/workflows/release_deploy.yml",
     "env": "AZ",
     "actions": "GHA"
   }, 
