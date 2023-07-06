@@ -67,6 +67,11 @@ const projectsCore = {
     "env": "AKS",
     "actions": "GHA"
   },
+  "Authorizer": {
+    "product": "authorizer",
+    "repository": "pagopa-platform-authorizer",
+    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1299",
+  },
   "BizEvent": {
     "product": "bizevents",
     "repository": "pagopa-biz-events-service",
