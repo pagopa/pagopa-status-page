@@ -71,6 +71,8 @@ const projectsCore = {
     "product": "authorizer",
     "repository": "pagopa-platform-authorizer",
     "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1299",
+    "env": "AZ",
+    "actions": "AZDO"
   },
   "BizEvent": {
     "product": "bizevents",
@@ -79,7 +81,6 @@ const projectsCore = {
     "env": "AKS",
     "actions": "AZDO"
   },
-  /* TODO un-comment this when response will be compliant
   "BizEvent - Datastore for positive events": {
     "product": "bizeventsdatastorepos",
     "repository": "pagopa-biz-events-datastore",
@@ -87,8 +88,6 @@ const projectsCore = {
     "env": "AKS",
     "actions": "AZDO"
   },
-  */
-  /* TODO un-comment this when response will be compliant
   "BizEvent - Datastore for negative events": {
     "product": "bizeventsdatastoreneg",
     "repository": "pagopa-negative-biz-events-datastore",
@@ -96,7 +95,13 @@ const projectsCore = {
     "env": "AKS",
     "actions": "AZDO"
   },
-  */
+  "Canone Unico": {
+    "product": "canoneunico",
+    "repository": "pagopa-canone-unico",
+    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=585&_a=summary",
+    "env": "AZ",
+    "actions": "AZDO"
+  },
   "FdR - Nodo dei Pagamenti (New)": {
     "product": "fdrndpnew",
     "repository": "pagopa-fdr",
@@ -117,6 +122,27 @@ const projectsCore = {
     "pipeline": "https://github.com/pagopa/pagopa-gpd-payments/actions/workflows/release_deploy.yml",
     "env": "AKS",
     "actions": "GHA"
+  },
+  "GPD - Reporting Analysis": {
+    "product": "gpdreportinganalysis",
+    "repository": "pagopa-gpd-reporting-analysis",
+    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1308",
+    "env": "AZ",
+    "actions": "AZDO"
+  },
+  "GPD - Reporting Batch": {
+    "product": "gpdreportingbatch",
+    "repository": "pagopa-gpd-reporting-batch",
+    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1285",
+    "env": "AZ",
+    "actions": "AZDO"
+  },
+  "GPD - Reporting Service": {
+    "product": "gpdreportingservice",
+    "repository": "pagopa-gpd-reporting-service",
+    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1307",
+    "env": "AZ",
+    "actions": "AZDO"
   },
   "GPD - Reporting Orgs Enrollment": {
     "product": "gpdenrollment",
