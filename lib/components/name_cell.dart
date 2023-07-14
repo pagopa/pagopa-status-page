@@ -88,7 +88,7 @@ class NameCell extends StatelessWidget {
   }
 
   Future<String> fetchRelease(repository) async {
-    final Storage storage = window.sessionStorage;
+    final Storage storage = window.localStorage;
 
     var response;
     if (storage['gh_token'] != null) {

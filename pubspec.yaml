@@ -39,7 +39,6 @@ dependencies:
   chaleno: ^0.0.6
   url_launcher: ^6.1.11
   font_awesome_flutter: ^10.5.0
-  localstorage: ^4.0.1+4
 
 dev_dependencies:
   flutter_test:

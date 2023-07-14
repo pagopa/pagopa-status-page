@@ -17,7 +17,7 @@ class DeployButton extends StatefulWidget {
 }
 
 class DeployButtonState extends State<DeployButton> {
-  final Storage storage = window.sessionStorage;
+  final Storage storage = window.localStorage;
 
   final StreamController<String> _refreshController = StreamController();
   late Timer _timer;

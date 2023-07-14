@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:statuspage/components/be_cell.dart';
 import 'package:statuspage/components/deploy_button.dart';
 import 'package:statuspage/components/fe_cell.dart';
