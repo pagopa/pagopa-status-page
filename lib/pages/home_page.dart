@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/pages/status_page.dart';
 
@@ -37,14 +33,13 @@ class HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: getTab(),
+      body: SelectionArea(
+        child: getTab(),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet_rounded),
-              label: "Core"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance), label: "TouchPoint"),
+          BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_rounded), label: "Core"),
+          BottomNavigationBarItem(icon: Icon(Icons.account_balance), label: "TouchPoint"),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -67,6 +62,4 @@ class HomePageState extends State<HomePage> {
       ],
     );
   }
-
-
 }
