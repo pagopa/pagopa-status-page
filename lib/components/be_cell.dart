@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:statuspage/constant.dart';
+import 'package:statuspage/utils.dart';
 
 class BeCell extends StatelessWidget {
   const BeCell({
@@ -18,19 +18,15 @@ class BeCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String url = project['product'];
-    return FutureBuilder<http.Response>(
+    return FutureBuilder(
         future: getInfo(env, url),
-        builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           late List<Widget> children;
           if (snapshot.hasData) {
-            if (snapshot.data?.statusCode == 200 && snapshot.data!.bodyBytes.isNotEmpty) {
-              children = buildOk(jsonDecode(snapshot.data!.body)['version'] ?? 'No Info Version');
+            if (snapshot.data.contains('.')) {
+              children = buildOk(snapshot.data);
             } else {
-              if (snapshot.data!.bodyBytes.isEmpty) {
-                children = buildError('Empty Body');
-              } else {
-                children = buildError(snapshot.data?.statusCode ?? 'Unknown');
-              }
+              children = buildError(snapshot.data);
             }
           } else if (snapshot.hasError) {
             children = buildError(snapshot.error);
@@ -42,7 +38,8 @@ class BeCell extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [...children,
+                children: [
+                  ...children,
                   // buildReleaseButton(env)
                 ],
               ),
@@ -50,7 +47,6 @@ class BeCell extends StatelessWidget {
           );
         });
   }
-
 
   List<Widget> buildLoading() {
     return const <Widget>[
@@ -85,7 +81,8 @@ class BeCell extends StatelessWidget {
         padding: const EdgeInsets.only(top: 16),
         child: Tooltip(
           message: '$version',
-          child: Text('$version',
+          child: Text(
+            '$version',
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -93,7 +90,7 @@ class BeCell extends StatelessWidget {
     ];
   }
 
-  getInfo(String env, String product) {
+  Future getInfo(String env, String product) async {
     late String url;
     if (env == 'DEV') {
       url = apim_d + basePath + product;
@@ -105,7 +102,19 @@ class BeCell extends StatelessWidget {
       url = apim_p + basePath + product;
     }
 
-    return http.get(Uri.parse(url));
-  }
+    var key = "${project['product']}-info-$env";
+    return remember(key, () async {
+      var response = await http.get(Uri.parse(url));
 
+      if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+        return jsonDecode(response.body)['version'] ?? 'No Info Version';
+      } else {
+        if (response.bodyBytes.isEmpty) {
+          return 'Empty Body';
+        } else {
+          return response.statusCode;
+        }
+      }
+    });
+  }
 }

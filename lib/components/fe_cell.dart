@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:chaleno/chaleno.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:statuspage/constant.dart';
+import 'package:statuspage/utils.dart';
 
 class FeCell extends StatelessWidget {
   const FeCell({
@@ -17,28 +15,27 @@ class FeCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-      return FutureBuilder(
-          future: getInfoFE(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            late List<Widget> children;
-            if (snapshot.hasData) {
-              children = buildOk(snapshot.data);
-            } else if (snapshot.hasError) {
-              children = buildError(snapshot.error);
-            } else {
-              children = buildLoading();
-            }
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: children,
-                ),
+    return FutureBuilder(
+        future: getInfoFE(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          late List<Widget> children;
+          if (snapshot.hasData) {
+            children = buildOk(snapshot.data);
+          } else if (snapshot.hasError) {
+            children = buildError(snapshot.error);
+          } else {
+            children = buildLoading();
+          }
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: children,
               ),
-            );
-          });
+            ),
+          );
+        });
   }
 
   TextButton buildReleaseButton(env) {
@@ -103,24 +100,7 @@ class FeCell extends StatelessWidget {
     ];
   }
 
-  getInfo(String env, String product) {
-    late String url;
-    if (env == 'DEV') {
-      url = apim_d + basePath + product;
-    }
-    if (env == 'UAT') {
-      url = apim_u + basePath + product;
-    }
-    if (env == 'PROD') {
-      url = apim_p + basePath + product;
-    }
-
-    return http.get(Uri.parse(url));
-  }
-
-
   getInfoFE() async {
-
     String url = 'https://${project["host"]}';
     if (env == 'DEV') {
       url = url + dns_d;
@@ -132,11 +112,13 @@ class FeCell extends StatelessWidget {
       url = url + dns_p;
     }
 
-    var parser = await Chaleno().load(url);
-    // TODO react application are javascript dynamic built
-    List<Result> results = parser!.getElementsByClassName('.info-box');
-    results.map((item) => debugPrint(item.text));
-    return "No Data";
+    var key = "${project['product']}-info-$env";
+    return remember(key, () async {
+      var parser = await Chaleno().load(url);
+      // TODO react application are javascript dynamic built
+      List<Result> results = parser!.getElementsByClassName('.info-box');
+      results.map((item) => debugPrint(item.text));
+      return "No Data";
+    });
   }
-
 }

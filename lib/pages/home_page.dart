@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/pages/status_page.dart';
@@ -15,6 +18,21 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    Timer.periodic(
+      const Duration(seconds: 60),
+      (Timer timer) {
+        projectsCore.forEach((name, info) {
+          var key1 = "${info['product']}-info-DEV";
+          var key2 = "${info['product']}-info-UAT";
+          var key3 = "${info['product']}-info-PROD";
+          var key4 = "${info['product']}-release";
+          DeleteCache.deleteKey(key1);
+          DeleteCache.deleteKey(key2);
+          DeleteCache.deleteKey(key3);
+          DeleteCache.deleteKey(key4);
+        });
+      },
+    );
   }
 
   @override
@@ -33,9 +51,7 @@ class HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: SelectionArea(
-        child: getTab(),
-      ),
+      body: getTab(),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_rounded), label: "Core"),

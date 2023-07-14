@@ -3,6 +3,7 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:statuspage/utils.dart';
 
 class NameCell extends StatelessWidget {
   const NameCell({
@@ -90,30 +91,24 @@ class NameCell extends StatelessWidget {
   Future<String> fetchRelease(repository) async {
     final Storage storage = window.localStorage;
 
-    var response;
-    if (storage['gh_token'] != null) {
-      response = await http.get(
-        Uri.parse('https://api.github.com/repos/pagopa/$repository/releases/latest'),
-        headers: <String, String>{
-          'X-GitHub-Api-Version': '2022-11-28',
-          'Authorization': 'Bearer ${storage['gh_token']}',
-          'Accept': 'application/vnd.github+json'
-        },
-      ); // there are limitation 60 requests per hour
-    } else {
-      response = await http.get(Uri.parse(
-          'https://api.github.com/repos/pagopa/$repository/releases/latest')); // there are limitation 60 requests per hour
-    }
-    return jsonDecode(response.body)['tag_name'] ?? 'No Release';
+    var key = "${project['product']}-release";
+    return remember(key, () async {
+      var response;
+      if (storage['gh_token'] != null) {
+        response = await http.get(
+          Uri.parse('https://api.github.com/repos/pagopa/$repository/releases/latest'),
+          headers: <String, String>{
+            'X-GitHub-Api-Version': '2022-11-28',
+            'Authorization': 'Bearer ${storage['gh_token']}',
+            'Accept': 'application/vnd.github+json'
+          },
+        ); // there are limitation 60 requests per hour
+      } else {
+        response = await http.get(Uri.parse(
+            'https://api.github.com/repos/pagopa/$repository/releases/latest')); // there are limitation 60 requests per hour
+      }
 
-    // final webScraper = WebScraper('https://github.com');
-    // if (await webScraper.loadWebPage('/pagopa/$repository/releases')) {
-    //   List<Map<String, dynamic>> elements =
-    //       webScraper.getElement('a.Link--primary', ['href']);
-    //   if (elements.isNotEmpty) {
-    //     return elements[0]['title'];
-    //   }
-    // }
-    // return "No Release";
+      return jsonDecode(response.body)['tag_name'] ?? 'No Release';
+    });
   }
 }

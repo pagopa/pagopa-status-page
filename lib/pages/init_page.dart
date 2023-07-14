@@ -11,7 +11,7 @@ class InitPage extends StatefulWidget {
 }
 
 class InitPageState extends State<InitPage> {
-  final Storage storage = window.localStorage;
+  final Storage storage = window.sessionStorage;
   final TextEditingController textController = TextEditingController();
 
   @override
