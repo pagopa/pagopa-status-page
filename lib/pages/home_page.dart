@@ -19,7 +19,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Timer.periodic(
-      const Duration(seconds: 60),
+      const Duration(seconds: 60 * 5),
       (Timer timer) {
         projectsCore.forEach((name, info) {
           var key1 = "${info['product']}-info-DEV";

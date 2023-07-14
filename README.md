@@ -7,7 +7,7 @@ A [Status Page](https://pagopa.github.io/pagopa-status-page/#/) for all the pago
 To run locally:
 
 ``` shell
-flutter run -d chrome --web-browser-flag "--disable-web-security"
+flutter run -d chrome --web-browser-flag "--disable-web-security" --web-port=8888
 ```
 
 _Note:_ To disable CORS policy we add the flag `--web-browser-flag "--disable-web-security"`
