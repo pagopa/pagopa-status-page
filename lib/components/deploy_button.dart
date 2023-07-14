@@ -155,6 +155,26 @@ class DeployButtonState extends State<DeployButton> {
       }
     }
 
+    var body = {};
+    if (widget.env == "DEV") {
+      body = {
+        'ref': 'main',
+        'inputs': {'environment': widget.env.toLowerCase(), 'skip_release': 'false'},
+      };
+    }
+    if (widget.env == "UAT") {
+      body = {
+        'ref': 'main',
+        'inputs': {'environment': widget.env.toLowerCase(), 'skip_release': 'false'},
+      };
+    }
+    if (widget.env == "PROD") {
+      body = {
+        'ref': 'main',
+        'inputs': {'environment': widget.env.toLowerCase(), 'skip_release': 'true'},
+      };
+    }
+
     response = await http.post(
       Uri.parse('https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/workflows/$id/dispatches'),
       headers: <String, String>{
@@ -162,10 +182,7 @@ class DeployButtonState extends State<DeployButton> {
         'Authorization': 'Bearer ${storage['gh_token']}',
         'Accept': 'application/vnd.github+json'
       },
-      body: jsonEncode({
-        'ref': 'main',
-        'inputs': {'environment': widget.env.toLowerCase(), 'skip_release': 'true'},
-      }),
+      body: jsonEncode(body),
     );
 
     setState(() {
