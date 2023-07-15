@@ -11,7 +11,6 @@ class StatusPage extends StatefulWidget {
 }
 
 class StatusPageState extends State<StatusPage> {
-
   @override
   void initState() {
     super.initState();
@@ -98,36 +97,5 @@ class StatusPageState extends State<StatusPage> {
       ));
     });
     return list;
-  }
-
-  void showAlert(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        barrierLabel: 'x',
-        builder: (context) => AlertDialog(
-              title: const Text('Inserisci un Github Token personale'),
-              content: Text("hi"),
-              actions: <Widget>[
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  child: const Text('Disable'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  child: const Text('Enable'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ));
   }
 }

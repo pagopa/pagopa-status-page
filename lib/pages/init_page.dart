@@ -47,7 +47,9 @@ class InitPageState extends State<InitPage> {
           ),
           Expanded(
             child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.40,
+              width: MediaQuery.of(context).size.width > 800
+                  ? MediaQuery.of(context).size.width * 0.40
+                  : MediaQuery.of(context).size.width * 0.90,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,6 +86,10 @@ class InitPageState extends State<InitPage> {
                           backgroundColor: Colors.blue,
                         ),
                         onPressed: () {
+                          if (textController.text == '') {
+                            showAlert(context);
+                            return;
+                          }
                           storage['gh_token'] = textController.text;
                           Navigator.pushReplacement(
                             context,
@@ -97,7 +103,10 @@ class InitPageState extends State<InitPage> {
                       ),
                     ],
                   ),
-                  const Text('* senza token alcune funzionalità non sono disponibili', style: TextStyle(color: Colors.grey),)
+                  const Text(
+                    '* senza token alcune funzionalità non sono disponibili',
+                    style: TextStyle(color: Colors.grey),
+                  )
                 ],
               ),
             ),
@@ -105,5 +114,27 @@ class InitPageState extends State<InitPage> {
         ],
       ),
     ));
+  }
+
+  void showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierLabel: 'x',
+        builder: (context) => AlertDialog(
+              title: const Text('Inserisci un token'),
+              content: Text("non puoi inserire un token vuoto"),
+              actions: <Widget>[
+                TextButton(
+                  style: TextButton.styleFrom(
+                    textStyle: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ));
   }
 }
