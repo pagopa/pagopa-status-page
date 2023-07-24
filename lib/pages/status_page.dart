@@ -30,7 +30,9 @@ class StatusPageState extends State<StatusPage> {
     return Column(
       children: [
         buildHeader(),
-        const Divider(),
+        const Divider(
+          color: Colors.grey,
+        ),
         Expanded(
           child: SingleChildScrollView(
             child: Padding(
@@ -47,7 +49,7 @@ class StatusPageState extends State<StatusPage> {
 
   buildHeader() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8, top: 16),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         SizedBox(width: MediaQuery.of(context).size.width * 0.20, child: const Text("Prodotti e Servizi")),
         SizedBox(width: MediaQuery.of(context).size.width * 0.10),
@@ -92,9 +94,7 @@ class StatusPageState extends State<StatusPage> {
     List<Widget> list = [];
     widget.projects.forEach((name, info) {
       list.add(RowItem(name: name, project: info));
-      list.add(const Divider(
-        color: Colors.grey,
-      ));
+      list.add(const Divider());
     });
     return list;
   }
