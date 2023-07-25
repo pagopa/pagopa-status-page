@@ -112,9 +112,9 @@ const projectsCore = {
   "GPD - Core": {
     "product": "gpd",
     "repository": "pagopa-debt-position",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=617",
-    "env": "AZ",
-    "actions": "AZDO"
+    "pipeline": "https://github.com/pagopa/pagopa-debt-position/actions/workflows/release_deploy.yml",
+    "env": "AKS",
+    "actions": "GHA"
   },
   "GPD - Payments": {
     "product": "gpdpayments",
