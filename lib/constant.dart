@@ -74,6 +74,13 @@ const projectsCore = {
     "env": "AZ",
     "actions": "AZDO"
   },
+  "Authorizer Configurator": {
+    "product": "authorizerconfig",
+    "repository": "pagopa-platform-authorizer-config",
+    "pipeline": "https://github.com/pagopa/pagopa-platform-authorizer-config/actions/workflows/release_deploy.yml",
+    "env": "AKS",
+    "actions": "GHA"
+  },
   "BizEvent": {
     "product": "bizevents",
     "repository": "pagopa-biz-events-service",
