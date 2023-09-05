@@ -9,6 +9,9 @@ const apim_p = "https://api${dns_p}";
 const basePath = "/shared/statuspage/v1/info?product=";
 
 
+const lastUpdatedKey = "last-updated";
+
+
 const projectsCore = {
   "ApiConfig - Cacher (Oracle)": {
     "product": "apiconfigcacheo",
