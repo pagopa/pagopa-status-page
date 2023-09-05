@@ -13,31 +13,31 @@ const projectsCore = {
   "ApiConfig - Cacher (Oracle)": {
     "product": "apiconfigcacheo",
     "repository": "pagopa-api-config-cache",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1236",
+    "pipeline": "https://github.com/pagopa/pagopa-api-config-cache/actions/workflows/release_deploy.yml",
     "env": "AKS",
-    "actions": "AZDO"
+    "actions": "GHA"
   },
   "ApiConfig - Cacher (Postgres)": {
     "product": "apiconfigcachep",
     "repository": "pagopa-api-config-cache",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1236",
+    "pipeline": "https://github.com/pagopa/pagopa-api-config-cache/actions/workflows/release_deploy.yml",
     "env": "AKS",
-    "actions": "AZDO"
+    "actions": "GHA"
   },
   "ApiConfig - Core": {
     "product": "apiconfig",
     "repository": "pagopa-api-config",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=581",
-    "env": "AZ",
-    "actions": "AZDO"
+    "pipeline": "https://github.com/pagopa/pagopa-api-config/actions/workflows/release_deploy.yml",
+    "env": "AKS",
+    "actions": "GHA"
   },
   "ApiConfig - FrontEnd": {
     "type": "frontend",
     "host": "config",
     "repository": "pagopa-api-config-fe",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=577",
+    "pipeline": "https://github.com/pagopa/pagopa-api-config-fe/actions/workflows/release_deploy.yml",
     "env": "AZ",
-    "actions": "AZDO"
+    "actions": "GHA"
   },
     "ApiConfig - SelfCare integration": {
     "product": "apiconfigselfcare",
@@ -84,23 +84,23 @@ const projectsCore = {
   "BizEvent": {
     "product": "bizevents",
     "repository": "pagopa-biz-events-service",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=927",
+    "pipeline": "https://github.com/pagopa/pagopa-biz-events-service/actions/workflows/release_deploy.yml",
     "env": "AKS",
-    "actions": "AZDO"
+    "actions": "GHA"
   },
   "BizEvent - Datastore for positive events": {
     "product": "bizeventsdatastorepos",
     "repository": "pagopa-biz-events-datastore",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=913",
+    "pipeline": "https://github.com/pagopa/pagopa-biz-events-datastore/actions/workflows/release_deploy.yml",
     "env": "AKS",
-    "actions": "AZDO"
+    "actions": "GHA"
   },
   "BizEvent - Datastore for negative events": {
     "product": "bizeventsdatastoreneg",
     "repository": "pagopa-negative-biz-events-datastore",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1312",
+    "pipeline": "https://github.com/pagopa/pagopa-negative-biz-events-datastore/actions/workflows/release_deploy.yml",
     "env": "AKS",
-    "actions": "AZDO"
+    "actions": "GHA"
   },
   "Canone Unico": {
     "product": "canoneunico",
@@ -154,9 +154,9 @@ const projectsCore = {
   "GPD - Reporting Orgs Enrollment": {
     "product": "gpdenrollment",
     "repository": "pagopa-reporting-orgs-enrollment",
-    "pipeline": "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=846",
+    "pipeline": "https://github.com/pagopa/pagopa-reporting-orgs-enrollment/actions/workflows/release_deploy.yml",
     "env": "AKS",
-    "actions": "AZDO"
+    "actions": "GHA"
   },
   /* TODO un-comment this when response will be compliant
   "GPS - Donations": {
