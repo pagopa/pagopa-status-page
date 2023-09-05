@@ -203,6 +203,13 @@ const projectsCore = {
     "env": "AKS",
     "actions": "GHA"
    },
+   "PDF Receipt - Generator": {
+    "product": "receiptpdfgenerator",
+    "repository": "pagopa-receipt-pdf-generator",
+    "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-generator/actions/workflows/release-deploy.yml",
+    "env": "AKS",
+    "actions": "GHA"
+   },
    "PDF Receipt - Notifier": {
     "product": "receiptpdfnotifier",
     "repository": "pagopa-receipt-pdf-notifier",
