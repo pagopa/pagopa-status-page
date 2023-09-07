@@ -21,12 +21,12 @@ class HomePageState extends State<HomePage> {
     Timer.periodic(
       const Duration(seconds: 60 * 5),
       (Timer timer) {
-        emptyLastUpdatedCache();
+        updateData();
       },
     );
   }
 
-  void emptyLastUpdatedCache() {
+  void emptyCache() {
     projectsCore.forEach((name, info) {
       var key1 = "${info['product']}-info-DEV";
       var key2 = "${info['product']}-info-UAT";
@@ -36,6 +36,7 @@ class HomePageState extends State<HomePage> {
       DeleteCache.deleteKey(key2);
       DeleteCache.deleteKey(key3);
       DeleteCache.deleteKey(key4);
+      DeleteCache.deleteKey(lastUpdatedKey);
     });
   }
 
@@ -76,8 +77,7 @@ class HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: IconButton(
               onPressed: () {
-                emptyLastUpdatedCache();
-                // TODO: Repopulate cache
+                updateData();
               },
               icon: const Icon(Icons.update),
             )
@@ -114,5 +114,10 @@ class HomePageState extends State<HomePage> {
 
   Stream<T> asyncPeriodic<T>(Duration period, Future<T> Function(int count) f) {
     return Stream.periodic(period, f).asyncMap((event) async => await event);
+  }
+
+  void updateData() {
+    emptyCache();
+    Navigator.popAndPushNamed(context, '/');
   }
 }
