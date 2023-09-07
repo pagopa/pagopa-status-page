@@ -60,14 +60,17 @@ class HomePageState extends State<HomePage> {
               stream: asyncPeriodic(const Duration(minutes: 1), (count) => ReadCache.getString(key: lastUpdatedKey)),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator(color: Colors.white));
+                  return Center(child: Text(
+                    "Last updated: now",
+                    style: TextStyle(color: Colors.white.withAlpha(200)),
+                  ));
                 } else {
                   final dateTime = DateTime.parse(snapshot.data);
                   final now = DateTime.now();
 
                   final timeDifference = now.difference(dateTime);
                   return Center(child: Text(
-                      "Last udpated: ${timeDifference.inMinutes} minutes ago",
+                      "Last updated: ${timeDifference.inMinutes} minutes ago",
                       style: TextStyle(color: Colors.white.withAlpha(200)),
                   ));
                 }
