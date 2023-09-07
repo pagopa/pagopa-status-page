@@ -21,18 +21,23 @@ class HomePageState extends State<HomePage> {
     Timer.periodic(
       const Duration(seconds: 60 * 5),
       (Timer timer) {
-        projectsCore.forEach((name, info) {
-          var key1 = "${info['product']}-info-DEV";
-          var key2 = "${info['product']}-info-UAT";
-          var key3 = "${info['product']}-info-PROD";
-          var key4 = "${info['product']}-release";
-          DeleteCache.deleteKey(key1);
-          DeleteCache.deleteKey(key2);
-          DeleteCache.deleteKey(key3);
-          DeleteCache.deleteKey(key4);
-        });
+        updateData();
       },
     );
+  }
+
+  void emptyCache() {
+    projectsCore.forEach((name, info) {
+      var key1 = "${info['product']}-info-DEV";
+      var key2 = "${info['product']}-info-UAT";
+      var key3 = "${info['product']}-info-PROD";
+      var key4 = "${info['product']}-release";
+      DeleteCache.deleteKey(key1);
+      DeleteCache.deleteKey(key2);
+      DeleteCache.deleteKey(key3);
+      DeleteCache.deleteKey(key4);
+      DeleteCache.deleteKey(lastUpdatedKey);
+    });
   }
 
   @override
@@ -50,6 +55,34 @@ class HomePageState extends State<HomePage> {
           "Status Page",
           style: TextStyle(color: Colors.white),
         ),
+        actions: <Widget>[
+          StreamBuilder(
+              stream: asyncPeriodic(const Duration(minutes: 1), (count) => ReadCache.getString(key: lastUpdatedKey)),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator(color: Colors.white));
+                } else {
+                  final dateTime = DateTime.parse(snapshot.data);
+                  final now = DateTime.now();
+
+                  final timeDifference = now.difference(dateTime);
+                  return Center(child: Text(
+                      "Last udpated: ${timeDifference.inMinutes} minutes ago",
+                      style: TextStyle(color: Colors.white.withAlpha(200)),
+                  ));
+                }
+              }
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: IconButton(
+              onPressed: () {
+                updateData();
+              },
+              icon: const Icon(Icons.update),
+            )
+          ),
+        ],
       ),
       body: getTab(),
       bottomNavigationBar: BottomNavigationBar(
@@ -77,5 +110,14 @@ class HomePageState extends State<HomePage> {
         StatusPage(projects: projectsTouchPoint),
       ],
     );
+  }
+
+  Stream<T> asyncPeriodic<T>(Duration period, Future<T> Function(int count) f) {
+    return Stream.periodic(period, f).asyncMap((event) async => await event);
+  }
+
+  void updateData() {
+    emptyCache();
+    Navigator.popAndPushNamed(context, '/');
   }
 }
