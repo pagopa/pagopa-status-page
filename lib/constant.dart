@@ -199,34 +199,35 @@ const projectsCore = {
     "env": "AKS",
     "actions": "GHA"
    },
-   "PDF Receipt - Datastore": {
-    "product": "receiptpdfdatastore",
-    "repository": "pagopa-receipt-pdf-datastore",
-    "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-datastore/actions/workflows/release-deploy.yml",
-    "env": "AKS",
-    "actions": "GHA"
-   },
-   "PDF Receipt - Generator": {
-    "product": "receiptpdfgenerator",
-    "repository": "pagopa-receipt-pdf-generator",
-    "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-generator/actions/workflows/release-deploy.yml",
-    "env": "AKS",
-    "actions": "GHA"
-   },
-   "PDF Receipt - Notifier": {
-    "product": "receiptpdfnotifier",
-    "repository": "pagopa-receipt-pdf-notifier",
-    "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-notifier/actions/workflows/release-deploy.yml",
-    "env": "AKS",
-    "actions": "GHA"
-   },
-   "PDF Receipt - Service": {
-    "product": "receiptpdfservice",
-    "repository": "pagopa-receipt-pdf-service",
-    "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-service/actions/workflows/release_deploy.yml",
-    "env": "AKS",
-    "actions": "GHA"
-   },
+//  todo: temporary removal until the service is in all environments
+//    "PDF Receipt - Datastore": {
+//     "product": "receiptpdfdatastore",
+//     "repository": "pagopa-receipt-pdf-datastore",
+//     "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-datastore/actions/workflows/release-deploy.yml",
+//     "env": "AKS",
+//     "actions": "GHA"
+//    },
+//    "PDF Receipt - Generator": {
+//     "product": "receiptpdfgenerator",
+//     "repository": "pagopa-receipt-pdf-generator",
+//     "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-generator/actions/workflows/release-deploy.yml",
+//     "env": "AKS",
+//     "actions": "GHA"
+//    },
+//    "PDF Receipt - Notifier": {
+//     "product": "receiptpdfnotifier",
+//     "repository": "pagopa-receipt-pdf-notifier",
+//     "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-notifier/actions/workflows/release-deploy.yml",
+//     "env": "AKS",
+//     "actions": "GHA"
+//    },
+//    "PDF Receipt - Service": {
+//     "product": "receiptpdfservice",
+//     "repository": "pagopa-receipt-pdf-service",
+//     "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-service/actions/workflows/release_deploy.yml",
+//     "env": "AKS",
+//     "actions": "GHA"
+//    },
   /*https://github.com/pagopa/pagopa-api-config-selfcare-integration/actions/workflows/release_deploy.yml*/
   /*https://github.com/pagopa/tps://github.com/pagopa/pagopa-api-config-selfcare-integration/actions/workflows/release_deploy.yml/actions/workflows/release_deploy.yml*/
 };
