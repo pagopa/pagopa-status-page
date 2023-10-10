@@ -70,7 +70,7 @@ class HomePageState extends State<HomePage> {
 
                   final timeDifference = now.difference(dateTime);
                   return Center(child: Text(
-                      "Last updated: ${timeDifference.inMinutes} minutes ago",
+                      "Last updated: ${timeDifference.inMinutes + 1} minutes ago",
                       style: TextStyle(color: Colors.white.withAlpha(200)),
                   ));
                 }

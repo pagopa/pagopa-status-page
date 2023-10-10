@@ -34,7 +34,7 @@ class RowItemState extends State<RowItem> {
     return MouseRegion(
       onEnter: (event) {
         setState(() {
-          _isHover = true;
+          // _isHover = true; TODO disabled for now
         });
       },
       onExit: (event) {
