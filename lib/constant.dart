@@ -227,6 +227,13 @@ const projectsCore = {
     "env": "AKS",
     "actions": "GHA"
    },
+   "PDF Receipt - Helpdesk": {
+    "product": "receiptpdfhelpdesk",
+    "repository": "pagopa-receipt-pdf-helpdesk",
+    "pipeline": "https://github.com/pagopa/pagopa-receipt-pdf-helpdesk/actions/workflows/release_deploy.yml",
+    "env": "AKS",
+    "actions": "GHA"
+   },
   /*https://github.com/pagopa/pagopa-api-config-selfcare-integration/actions/workflows/release_deploy.yml*/
   /*https://github.com/pagopa/tps://github.com/pagopa/pagopa-api-config-selfcare-integration/actions/workflows/release_deploy.yml/actions/workflows/release_deploy.yml*/
 };
