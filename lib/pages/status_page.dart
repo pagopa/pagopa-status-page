@@ -30,9 +30,7 @@ class StatusPageState extends State<StatusPage> {
     return Column(
       children: [
         buildHeader(),
-        const Divider(
-          color: Colors.grey,
-        ),
+        const Divider(),
         Expanded(
           child: SingleChildScrollView(
             child: Padding(

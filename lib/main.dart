@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:statuspage/bloc/settings_cubit.dart';
 import 'package:statuspage/pages/init_page.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (_) => SettingsCubit(),
+        child: BlocBuilder<SettingsCubit, bool>(
+          builder: (context, darkTheme) => buildMaterialApp(darkTheme),
+        ),);
+  }
+
+  MaterialApp buildMaterialApp(bool darkTheme) {
     return MaterialApp(
-      title: 'Status Page',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const InitPage(),
-    );
+          title: 'Status Page',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorSchemeSeed: Colors.blue,
+            useMaterial3: true,
+            brightness: darkTheme ? Brightness.dark : Brightness.light,
+          ),
+          home: const SelectionArea(
+            child: InitPage(),
+          ));
   }
 }

@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/pages/status_page.dart';
+
+import '../bloc/settings_cubit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  bool _darkTheme = false;
 
   @override
   void initState() {
@@ -51,47 +55,68 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text(
-          "Status Page",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text("Status Page"),
         actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: BlocBuilder<SettingsCubit, bool>(
+              builder: (context, darkTheme) {
+                return Switch(
+                  value: _darkTheme,
+                  onChanged: (value) {
+                    setState(() {
+                      _darkTheme = value;
+                    });
+                    Future.delayed(const Duration(milliseconds: 100)).then(
+                        (value) => context.read<SettingsCubit>().toggle());
+                  },
+                  thumbIcon: MaterialStateProperty.resolveWith((states) {
+                    if (!_darkTheme) {
+                      return const Icon(Icons.light_mode);
+                    }
+                    return const Icon(Icons.dark_mode);
+                  }),
+                );
+              },
+            ),
+          ),
           StreamBuilder(
-              stream: asyncPeriodic(const Duration(minutes: 1), (count) => ReadCache.getString(key: lastUpdatedKey)),
+              stream: asyncPeriodic(const Duration(minutes: 1),
+                  (count) => ReadCache.getString(key: lastUpdatedKey)),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(child: Text(
+                  return Center(
+                      child: Text(
                     "Last updated: now",
-                    style: TextStyle(color: Colors.white.withAlpha(200)),
                   ));
                 } else {
                   final dateTime = DateTime.parse(snapshot.data);
                   final now = DateTime.now();
 
                   final timeDifference = now.difference(dateTime);
-                  return Center(child: Text(
-                      "Last updated: ${timeDifference.inMinutes + 1} minutes ago",
-                      style: TextStyle(color: Colors.white.withAlpha(200)),
+                  return Center(
+                      child: Text(
+                    "Last updated: ${timeDifference.inMinutes + 1} minutes ago",
                   ));
                 }
-              }
-          ),
+              }),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: IconButton(
-              onPressed: () {
-                updateData();
-              },
-              icon: const Icon(Icons.update),
-            )
-          ),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: IconButton(
+                onPressed: () {
+                  updateData();
+                },
+                icon: const Icon(Icons.update),
+              )),
         ],
       ),
       body: getTab(),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_rounded), label: "Core"),
-          BottomNavigationBarItem(icon: Icon(Icons.account_balance), label: "TouchPoint"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance_wallet_rounded), label: "Core"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance), label: "TouchPoint"),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
