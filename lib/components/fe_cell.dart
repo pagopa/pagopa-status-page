@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:developer' as dev;
+
 import 'package:chaleno/chaleno.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/utils.dart';
 
@@ -101,24 +105,28 @@ class FeCell extends StatelessWidget {
   }
 
   getInfoFE() async {
-    String url = 'https://${project["host"]}';
-    if (env == 'DEV') {
-      url = url + dns_d;
-    }
+    String dns = dns_d;
     if (env == 'UAT') {
-      url = url + dns_u;
+      dns = dns_u;
     }
     if (env == 'PROD') {
-      url = url + dns_p;
+      dns = dns_p;
     }
+    String url = 'https://${project["host"]}/version.json'.replaceAll("%s", dns);
 
     var key = "${project['product']}-info-$env";
     return remember(key, () async {
-      var parser = await Chaleno().load(url);
-      // TODO react application are javascript dynamic built
-      List<Result> results = parser!.getElementsByClassName('.info-box');
-      results.map((item) => debugPrint(item.text));
-      return "No Data";
+      var response = await http.get(Uri.parse(url));
+      dev.debugger();
+      if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+        return jsonDecode(response.body)['version'] ?? 'No Info Version';
+      } else {
+        if (response.bodyBytes.isEmpty) {
+          return 'Empty Body';
+        } else {
+          return response.statusCode;
+        }
+      }
     });
   }
 }

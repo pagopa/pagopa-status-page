@@ -1,6 +1,6 @@
-const dns_d = ".dev.platform.pagopa.it";
-const dns_u = ".uat.platform.pagopa.it";
-const dns_p = ".platform.pagopa.it";
+const dns_d = "dev.platform.pagopa.it";
+const dns_u = "uat.platform.pagopa.it";
+const dns_p = "platform.pagopa.it";
 
 const apim_d = "https://api${dns_d}";
 const apim_u = "https://api${dns_u}";
@@ -36,7 +36,8 @@ const projectsCore = {
   },
   "ApiConfig - FrontEnd": {
     "type": "frontend",
-    "host": "config",
+    "product": "apiconfig",
+    "host": "config.%s",
     "repository": "pagopa-api-config-fe",
     "pipeline": "https://github.com/pagopa/pagopa-api-config-fe/actions/workflows/release_deploy.yml",
     "env": "AZ",
@@ -103,6 +104,15 @@ const projectsCore = {
     "repository": "pagopa-negative-biz-events-datastore",
     "pipeline": "https://github.com/pagopa/pagopa-negative-biz-events-datastore/actions/workflows/release_deploy.yml",
     "env": "AKS",
+    "actions": "GHA"
+  },
+  "BackOffice pagoPA - FrontEnd": {
+    "type": "frontend",
+    "product": "backofficepagopa",
+    "host": "selfcare.%s/ui",
+    "repository": "pagopa-selfcare-frontend",
+    "pipeline": "https://github.com/pagopa/pagopa-selfcare-frontend/actions/workflows/release_deploy.yml",
+    "env": "AZ",
     "actions": "GHA"
   },
   "Canone Unico": {
