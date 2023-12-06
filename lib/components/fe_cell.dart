@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer' as dev;
 
 import 'package:chaleno/chaleno.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +116,6 @@ class FeCell extends StatelessWidget {
     var key = "${project['product']}-info-$env";
     return remember(key, () async {
       var response = await http.get(Uri.parse(url));
-      dev.debugger();
       if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
         return jsonDecode(response.body)['version'] ?? 'No Info Version';
       } else {
