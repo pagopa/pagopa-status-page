@@ -94,7 +94,7 @@ class BeCell extends StatelessWidget {
           ),
         ),
       ),
-      FutureBuilder<Icon>(
+      FutureBuilder<Widget>(
           future: buildIcon(version),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -105,7 +105,7 @@ class BeCell extends StatelessWidget {
     ];
   }
 
-  Future<Icon> buildIcon(String version) async {
+  Future<Widget> buildIcon(String version) async {
     var key = "${project['product']}-release";
 
     String repoVersion = await ReadCache.getString(key: key);
@@ -120,7 +120,7 @@ class BeCell extends StatelessWidget {
     if (compareTo(repoVersion, version) == 0) {
       return const Icon(FontAwesomeIcons.equals, color: Colors.green,);
     }
-    return const Icon(Icons.question_mark, color: Colors.grey,);
+    return Container();
   }
 
   Future getInfo(String env, String product) async {
