@@ -77,13 +77,14 @@ class StatusPageState extends State<StatusPage> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             )),
-        SizedBox(
+        MediaQuery.of(context).size.width > 1200 ? SizedBox(
             width: MediaQuery.of(context).size.width * 0.10,
             child: const Center(
               child: Text(
                 "Link Utili",
               ),
-            ))
+            )) : Container()
+
       ]),
     );
   }

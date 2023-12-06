@@ -65,9 +65,14 @@ class BeCell extends StatelessWidget {
         color: Colors.red,
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Text('Error: $message'),
-      ),
+          padding: const EdgeInsets.only(top: 16),
+          child: Tooltip(
+            message: '$message',
+            child: Text(
+              '$message',
+              overflow: TextOverflow.ellipsis,
+            ),
+          ))
     ];
   }
 

@@ -95,7 +95,12 @@ class FeCell extends StatelessWidget {
       ),
       Padding(
         padding: const EdgeInsets.only(top: 16),
-        child: Text('Version: $version'),
+        child: Tooltip(
+          message: '$version',
+          child: Text(
+            '$version',
+            overflow: TextOverflow.ellipsis,
+          ),)
       ),
     ];
   }

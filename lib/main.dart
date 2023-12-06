@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:statuspage/bloc/settings_cubit.dart';
+import 'package:statuspage/pages/home_page.dart';
 import 'package:statuspage/pages/init_page.dart';
 
 void main() async {
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
             brightness: darkTheme ? Brightness.dark : Brightness.light,
           ),
           home: const SelectionArea(
-            child: InitPage(),
+            child: SafeArea(child: HomePage()),
           ));
   }
 }

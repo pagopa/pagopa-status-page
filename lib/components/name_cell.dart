@@ -20,21 +20,30 @@ class NameCell extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          name,
+      Tooltip(
+      message: '$name',
+      child: Text(
+        '$name',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
+        overflow: TextOverflow.ellipsis,
+      ),),
+        MediaQuery.of(context).size.width > 450 ?
         Row(children: [
           buildLabelEnv(project),
           buildLabelPipe(project),
-        ]),
+        ]):Container(),
         FutureBuilder(
           future: fetchRelease(project['repository']),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: Text('Last Release: ${snapshot.data!}'),
+                child: Tooltip(
+                  message: '${snapshot.data!}',
+                  child: Text(
+                    '${snapshot.data!}',
+                    overflow: TextOverflow.ellipsis,
+                  ),)
               );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');

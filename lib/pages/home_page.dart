@@ -17,7 +17,6 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  bool _darkTheme = false;
 
   @override
   void initState() {
@@ -62,16 +61,12 @@ class HomePageState extends State<HomePage> {
             child: BlocBuilder<SettingsCubit, bool>(
               builder: (context, darkTheme) {
                 return Switch(
-                  value: _darkTheme,
+                  value: darkTheme,
                   onChanged: (value) {
-                    setState(() {
-                      _darkTheme = value;
-                    });
-                    Future.delayed(const Duration(milliseconds: 100)).then(
-                        (value) => context.read<SettingsCubit>().toggle());
+                    context.read<SettingsCubit>().toggle();
                   },
                   thumbIcon: MaterialStateProperty.resolveWith((states) {
-                    if (!_darkTheme) {
+                    if (!darkTheme) {
                       return const Icon(Icons.light_mode);
                     }
                     return const Icon(Icons.dark_mode);
@@ -85,7 +80,7 @@ class HomePageState extends State<HomePage> {
                   (count) => ReadCache.getString(key: lastUpdatedKey)),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                       child: Text(
                     "Last updated: now",
                   ));

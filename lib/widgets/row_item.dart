@@ -81,10 +81,10 @@ class RowItemState extends State<RowItem> {
                 ),
               )),
           SizedBox(width: MediaQuery.of(context).size.width * 0.10, child: buildCell("PROD", widget.project)),
-          SizedBox(
+          MediaQuery.of(context).size.width > 1200 ? SizedBox(
             width: MediaQuery.of(context).size.width * 0.10,
             child: LinkCell(project: widget.project),
-          )
+          ) : Container()
         ],
       ),
     );
