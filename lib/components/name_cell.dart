@@ -26,24 +26,24 @@ class NameCell extends StatelessWidget {
         '$name',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         overflow: TextOverflow.ellipsis,
-      ),),
-        MediaQuery.of(context).size.width > 450 ?
-        Row(children: [
-          buildLabelEnv(project),
-          buildLabelPipe(project),
-        ]):Container(),
-        FutureBuilder(
+      ),), FutureBuilder(
           future: fetchRelease(project['repository']),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Tooltip(
-                  message: '${snapshot.data!}',
-                  child: Text(
-                    '${snapshot.data!}',
-                    overflow: TextOverflow.ellipsis,
-                  ),)
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color:  const Color(0x903A7BA8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Tooltip(
+                    message: '${snapshot.data!}',
+                    child: Text(
+                      '${snapshot.data!}',
+                      overflow: TextOverflow.ellipsis,
+                    ),),
+                ),
               );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
@@ -51,7 +51,13 @@ class NameCell extends StatelessWidget {
             // By default, show a loading spinner.
             return const SizedBox(height: 20, width: 20, child: CircularProgressIndicator());
           },
-        )
+        ),
+        MediaQuery.of(context).size.width > 450 ?
+        Row(children: [
+          buildLabelEnv(project),
+          buildLabelPipe(project),
+        ]):Container(),
+
       ],
     );
   }

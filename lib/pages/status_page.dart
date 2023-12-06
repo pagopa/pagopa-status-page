@@ -47,44 +47,48 @@ class StatusPageState extends State<StatusPage> {
 
   buildHeader() {
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8, top: 16),
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(width: MediaQuery.of(context).size.width * 0.20, child: const Text("Prodotti e Servizi")),
-        SizedBox(width: MediaQuery.of(context).size.width * 0.10),
-        SizedBox(
-            width: MediaQuery.of(context).size.width * 0.10,
-            child: const Center(
-              child: Text(
-                "DEV",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            )),
-        SizedBox(width: MediaQuery.of(context).size.width * 0.10),
-        SizedBox(
-            width: MediaQuery.of(context).size.width * 0.10,
-            child: const Center(
-              child: Text(
-                "UAT",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            )),
-        SizedBox(width: MediaQuery.of(context).size.width * 0.10),
-        SizedBox(
-            width: MediaQuery.of(context).size.width * 0.10,
-            child: const Center(
-              child: Text(
-                "PROD",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            )),
-        MediaQuery.of(context).size.width > 1200 ? SizedBox(
-            width: MediaQuery.of(context).size.width * 0.10,
-            child: const Center(
-              child: Text(
-                "Link Utili",
-              ),
-            )) : Container()
-
+      padding:
+          const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 8, top: 16),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        const Flexible(
+            flex: 1, fit: FlexFit.tight, child: Text("Prodotti e Servizi")),
+        const Flexible(
+          flex: 1,
+          child: Center(
+            child: Text(
+              "DEV",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+        const Flexible(
+          flex: 1,
+          child: Center(
+            child: Text(
+              "UAT",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+        const Flexible(
+          flex: 1,
+          child: Center(
+            child: Text(
+              "PROD",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+        MediaQuery.of(context).size.width > 1200
+            ? const Flexible(
+                flex: 1,
+                child: Center(
+                  child: Text(
+                    "Link Utili",
+                  ),
+                ),
+              )
+            : Container()
       ]),
     );
   }

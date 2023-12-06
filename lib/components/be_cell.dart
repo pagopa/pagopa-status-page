@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/utils.dart';
@@ -92,7 +94,33 @@ class BeCell extends StatelessWidget {
           ),
         ),
       ),
+      FutureBuilder<Icon>(
+          future: buildIcon(version),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return snapshot.data!;
+            }
+            return Container();
+          })
     ];
+  }
+
+  Future<Icon> buildIcon(String version) async {
+    var key = "${project['product']}-release";
+
+    String repoVersion = await ReadCache.getString(key: key);
+
+    if (compareTo(repoVersion, version) == -1) {
+      return const Icon(Icons.arrow_upward, color: Colors.red,);
+    }
+
+    if (compareTo(repoVersion, version) == 1) {
+      return const Icon(Icons.arrow_downward, color: Colors.yellow,);
+    }
+    if (compareTo(repoVersion, version) == 0) {
+      return const Icon(FontAwesomeIcons.equals, color: Colors.green,);
+    }
+    return const Icon(Icons.question_mark, color: Colors.grey,);
   }
 
   Future getInfo(String env, String product) async {
