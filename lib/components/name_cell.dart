@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:statuspage/bloc/app_cubit.dart';
 import 'package:statuspage/utils.dart';
 
 class NameCell extends StatelessWidget {
@@ -20,36 +22,43 @@ class NameCell extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-      Tooltip(
+        buildName(),
+        buildRepoVersion(context),
+        buildExtraLabel(context),
+      ],
+    );
+  }
+
+  FutureBuilder<String> buildRepoVersion(context) {
+    return FutureBuilder(
+      future: fetchRelease(context, project['repository']),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Tooltip(
+            message: snapshot.data!,
+            child: Text(
+              snapshot.data!,
+              overflow: TextOverflow.ellipsis,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const SizedBox(
+            height: 20, width: 20, child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Tooltip buildName() {
+    return Tooltip(
       message: '$name',
       child: Text(
         '$name',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         overflow: TextOverflow.ellipsis,
-      ),), FutureBuilder(
-          future: fetchRelease(project['repository']),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Tooltip(
-                message: '${snapshot.data!}',
-                child: Text(
-                  '${snapshot.data!}',
-                  overflow: TextOverflow.ellipsis,
-                ),);
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
-            // By default, show a loading spinner.
-            return const SizedBox(height: 20, width: 20, child: CircularProgressIndicator());
-          },
-        ),
-        MediaQuery.of(context).size.width > 450 ?
-        Row(children: [
-          buildLabelEnv(project),
-          buildLabelPipe(project),
-        ]):Container(),
-
-      ],
+      ),
     );
   }
 
@@ -59,14 +68,17 @@ class NameCell extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: project['actions'] == 'GHA' ? Colors.black54 : Colors.blue[100],
+          color:
+              project['actions'] == 'GHA' ? Colors.black54 : Colors.blue[100],
         ),
         child: Padding(
           padding: const EdgeInsets.all(6.0),
           child: Text(
             project['actions'] ?? 'TODO',
             style: TextStyle(
-                color: project['actions'] == 'GHA' ? Colors.white : Colors.blue[500],
+                color: project['actions'] == 'GHA'
+                    ? Colors.white
+                    : Colors.blue[500],
                 fontSize: 12,
                 fontWeight: FontWeight.bold),
           ),
@@ -79,14 +91,17 @@ class NameCell extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: project['env'] == 'AKS' ? Colors.deepPurple[100] : Colors.blue[100],
+        color:
+            project['env'] == 'AKS' ? Colors.deepPurple[100] : Colors.blue[100],
       ),
       child: Padding(
         padding: const EdgeInsets.all(6.0),
         child: Text(
           project['env'] ?? 'TODO',
           style: TextStyle(
-              color: project['env'] == 'AKS' ? Colors.deepPurple[500] : Colors.blue[500],
+              color: project['env'] == 'AKS'
+                  ? Colors.deepPurple[500]
+                  : Colors.blue[500],
               fontSize: 12,
               fontWeight: FontWeight.bold),
         ),
@@ -94,15 +109,16 @@ class NameCell extends StatelessWidget {
     );
   }
 
-  Future<String> fetchRelease(repository) async {
+  Future<String> fetchRelease(BuildContext context, repository) async {
     final Storage storage = window.localStorage;
 
     var key = "${project['product']}-release";
-    return remember(key, () async {
-      var response;
+    var version = await remember(key, () async {
+      http.Response response;
       if (storage['gh_token'] != null) {
         response = await http.get(
-          Uri.parse('https://api.github.com/repos/pagopa/$repository/releases/latest'),
+          Uri.parse(
+              'https://api.github.com/repos/pagopa/$repository/releases/latest'),
           headers: <String, String>{
             'X-GitHub-Api-Version': '2022-11-28',
             'Authorization': 'Bearer ${storage['gh_token']}',
@@ -113,8 +129,20 @@ class NameCell extends StatelessWidget {
         response = await http.get(Uri.parse(
             'https://api.github.com/repos/pagopa/$repository/releases/latest')); // there are limitation 60 requests per hour
       }
-
       return jsonDecode(response.body)['tag_name'] ?? 'No Release';
     });
+    if (context.mounted) {
+      context.read<AppCubit>().addRepo(project['product'], version);
+    }
+    return version;
+  }
+
+  buildExtraLabel(context) {
+    return MediaQuery.of(context).size.width > 450
+        ? Row(children: [
+            buildLabelEnv(project),
+            buildLabelPipe(project),
+          ])
+        : Container();
   }
 }

@@ -15,7 +15,6 @@ class RowItem extends StatefulWidget {
 }
 
 class RowItemState extends State<RowItem> {
-
   @override
   void initState() {
     super.initState();
@@ -37,9 +36,9 @@ class RowItemState extends State<RowItem> {
               flex: 1,
               fit: FlexFit.tight,
               child: NameCell(name: widget.name, project: widget.project)),
-          buildCell("DEV", widget.project),
-          buildCell("UAT", widget.project),
-          buildCell("PROD", widget.project),
+          Flexible(flex: 1, child: buildCell("DEV", widget.project)),
+          Flexible(flex: 1, child: buildCell("UAT", widget.project)),
+          Flexible(flex: 1, child: buildCell("PROD", widget.project)),
           MediaQuery.of(context).size.width > 1200
               ? Flexible(flex: 1, child: LinkCell(project: widget.project))
               : Container()
@@ -50,9 +49,9 @@ class RowItemState extends State<RowItem> {
 
   Widget buildCell(env, product) {
     if (product["type"] == "frontend") {
-      return Flexible(flex: 1, child: FeCell(env: env, project: product));
+      return FeCell(env: env, project: product);
     } else {
-      return Flexible(flex: 1, child: BeCell(env: env, project: product));
+      return BeCell(env: env, project: product);
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:statuspage/bloc/app_cubit.dart';
 import 'package:statuspage/bloc/settings_cubit.dart';
 import 'package:statuspage/pages/home_page.dart';
 import 'package:statuspage/pages/init_page.dart';
@@ -14,8 +15,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (_) => SettingsCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => SettingsCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => AppCubit(),
+        ),
+
+      ],
         child: BlocBuilder<SettingsCubit, bool>(
           builder: (context, darkTheme) => buildMaterialApp(darkTheme),
         ),);

@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:statuspage/bloc/app_cubit.dart';
+import 'package:statuspage/bloc/app_state.dart';
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/utils.dart';
 
@@ -88,14 +91,12 @@ class BeCell extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          FutureBuilder<Widget>(
-              future: buildIcon(version),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                }
-                return Container();
-
+          BlocSelector<AppCubit, AppState, Map<String,String>>(
+            selector: (state){
+              return state.repoVersion;
+            },
+              builder: (context, Map<String,String> repoVersion) {
+                return buildIcon(repoVersion[project['product']] ?? '', version);
               }),
           Flexible(
             fit: FlexFit.loose,
@@ -113,10 +114,7 @@ class BeCell extends StatelessWidget {
     ];
   }
 
-  Future<Widget> buildIcon(String version) async {
-    var key = "${project['product']}-release";
-
-    String repoVersion = await ReadCache.getString(key: key);
+  Widget buildIcon(String repoVersion, String version)  {
 
     if (compareTo(repoVersion, version) == -1) {
       return const Tooltip(
