@@ -84,24 +84,32 @@ class BeCell extends StatelessWidget {
         Icons.check_circle_outline,
         color: Colors.green,
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Tooltip(
-          message: '$version',
-          child: Text(
-            '$version',
-            overflow: TextOverflow.ellipsis,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          FutureBuilder<Widget>(
+              future: buildIcon(version),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return snapshot.data!;
+                }
+                return Container();
+
+              }),
+          Flexible(
+            fit: FlexFit.loose,
+            child: Tooltip(
+              message: '$version',
+              child: Text(
+                '$version',
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
-        ),
+        ],
       ),
-      FutureBuilder<Widget>(
-          future: buildIcon(version),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return snapshot.data!;
-            }
-            return Container();
-          })
+
     ];
   }
 
@@ -111,14 +119,34 @@ class BeCell extends StatelessWidget {
     String repoVersion = await ReadCache.getString(key: key);
 
     if (compareTo(repoVersion, version) == -1) {
-      return const Icon(Icons.arrow_upward, color: Colors.red,);
+      return const Tooltip(
+          message: 'versione maggiore rispetto al repository',
+          child: Icon(
+            Icons.arrow_upward,
+            color: Colors.red,
+          ));
     }
 
     if (compareTo(repoVersion, version) == 1) {
-      return const Icon(Icons.arrow_downward, color: Colors.yellow,);
+      return const Tooltip(
+          message: 'versione minore rispetto al repository',
+          child: Icon(
+            Icons.arrow_downward,
+            color: Colors.orange,
+          ));
     }
     if (compareTo(repoVersion, version) == 0) {
-      return const Icon(FontAwesomeIcons.equals, color: Colors.green,);
+      return const Padding(
+        padding: EdgeInsets.only(right: 2.0),
+        child: Tooltip(
+          message: 'versione allineata al repository',
+          child: Icon(
+            FontAwesomeIcons.equals,
+            color: Colors.green,
+            size: 20,
+          ),
+        ),
+      );
     }
     return Container();
   }

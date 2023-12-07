@@ -30,21 +30,12 @@ class NameCell extends StatelessWidget {
           future: fetchRelease(project['repository']),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color:  const Color(0x903A7BA8),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Tooltip(
-                    message: '${snapshot.data!}',
-                    child: Text(
-                      '${snapshot.data!}',
-                      overflow: TextOverflow.ellipsis,
-                    ),),
-                ),
-              );
+              return Tooltip(
+                message: '${snapshot.data!}',
+                child: Text(
+                  '${snapshot.data!}',
+                  overflow: TextOverflow.ellipsis,
+                ),);
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
