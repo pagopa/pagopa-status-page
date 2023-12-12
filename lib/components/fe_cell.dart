@@ -18,8 +18,9 @@ class FeCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String url = project['product'];
     return FutureBuilder(
-        future: getInfoFE(),
+        future: getInfoFE(env, url),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           late List<Widget> children;
           if (snapshot.hasData) {
@@ -108,16 +109,17 @@ class FeCell extends StatelessWidget {
     ];
   }
 
-  getInfoFE() async {
-    String dns = dns_d;
+  getInfoFE(String env, String product) async {
+    late String url;
+    if (env == 'DEV') {
+      url = apim_d + basePath + product;
+    }
     if (env == 'UAT') {
-      dns = dns_u;
+      url = apim_u +  basePath + product;
     }
     if (env == 'PROD') {
-      dns = dns_p;
+      url = apim_p + basePath + product;
     }
-    String url = 'https://${project["host"]}/version.json'.replaceAll("%s", dns);
-
     var key = "${project['product']}-info-$env";
     return remember(key, () async {
       var response = await http.get(Uri.parse(url));

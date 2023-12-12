@@ -2,9 +2,9 @@ const dns_d = "dev.platform.pagopa.it";
 const dns_u = "uat.platform.pagopa.it";
 const dns_p = "platform.pagopa.it";
 
-const apim_d = "https://api${dns_d}";
-const apim_u = "https://api${dns_u}";
-const apim_p = "https://api${dns_p}";
+const apim_d = "https://api.${dns_d}";
+const apim_u = "https://api.${dns_u}";
+const apim_p = "https://api.${dns_p}";
 
 const basePath = "/shared/statuspage/v1/info?product=";
 
@@ -36,14 +36,13 @@ const projectsCore = {
   },
   "ApiConfig - FrontEnd": {
     "type": "frontend",
-    "product": "apiconfig",
-    "host": "config.%s",
+    "product": "apiconfig-fe",
     "repository": "pagopa-api-config-fe",
     "pipeline": "https://github.com/pagopa/pagopa-api-config-fe/actions/workflows/release_deploy.yml",
     "env": "AZ",
     "actions": "GHA"
   },
-    "ApiConfig - SelfCare integration": {
+  "ApiConfig - SelfCare integration": {
     "product": "apiconfigselfcare",
     "repository": "pagopa-api-config-selfcare-integration",
     "pipeline": "https://github.com/pagopa/pagopa-api-config-selfcare-integration/actions/workflows/release_deploy.yml",
@@ -106,10 +105,17 @@ const projectsCore = {
     "env": "AKS",
     "actions": "GHA"
   },
-  "BackOffice pagoPA - FrontEnd": {
-    "type": "frontend",
+  "BackOffice pagoPA": {
     "product": "backofficepagopa",
     "host": "selfcare.%s/ui",
+    "repository": "pagopa-selfcare-ms-backoffice-backend",
+    "pipeline": "https://github.com/pagopa/pagopa-selfcare-ms-backoffice-backend/actions/workflows/release_deploy.yml",
+    "env": "AKS",
+    "actions": "GHA"
+  },
+  "BackOffice pagoPA - FrontEnd": {
+    "type": "frontend",
+    "product": "backofficepagopa-fe",
     "repository": "pagopa-selfcare-frontend",
     "pipeline": "https://github.com/pagopa/pagopa-selfcare-frontend/actions/workflows/release_deploy.yml",
     "env": "AZ",
