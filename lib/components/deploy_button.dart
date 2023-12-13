@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
+@deprecated
 class DeployButton extends StatefulWidget {
-  const DeployButton({Key? key, required this.env, required this.project}) : super(key: key);
+  const DeployButton({Key? key, required this.env, required this.project})
+      : super(key: key);
 
   final project;
   final String env;
@@ -57,7 +59,8 @@ class DeployButtonState extends State<DeployButton> {
       },
       label: Text(
         getLabel(),
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       icon: const FaIcon(
         FontAwesomeIcons.arrowRight,
@@ -82,7 +85,8 @@ class DeployButtonState extends State<DeployButton> {
 
   getWorkflow() async {
     dynamic response = await http.get(
-      Uri.parse('https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/runs'),
+      Uri.parse(
+          'https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/runs'),
       headers: <String, String>{
         'X-GitHub-Api-Version': '2022-11-28',
         'Authorization': 'Bearer ${storage['gh_token']}',
@@ -138,7 +142,8 @@ class DeployButtonState extends State<DeployButton> {
     });
 
     dynamic response = await http.get(
-      Uri.parse('https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/workflows'),
+      Uri.parse(
+          'https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/workflows'),
       headers: <String, String>{
         'X-GitHub-Api-Version': '2022-11-28',
         'Authorization': 'Bearer ${storage['gh_token']}',
@@ -159,24 +164,34 @@ class DeployButtonState extends State<DeployButton> {
     if (widget.env == "DEV") {
       body = {
         'ref': 'main',
-        'inputs': {'environment': widget.env.toLowerCase(), 'skip_release': 'false'},
+        'inputs': {
+          'environment': widget.env.toLowerCase(),
+          'skip_release': 'false'
+        },
       };
     }
     if (widget.env == "UAT") {
       body = {
         'ref': 'main',
-        'inputs': {'environment': widget.env.toLowerCase(), 'skip_release': 'false'},
+        'inputs': {
+          'environment': widget.env.toLowerCase(),
+          'skip_release': 'false'
+        },
       };
     }
     if (widget.env == "PROD") {
       body = {
         'ref': 'main',
-        'inputs': {'environment': widget.env.toLowerCase(), 'skip_release': 'true'},
+        'inputs': {
+          'environment': widget.env.toLowerCase(),
+          'skip_release': 'true'
+        },
       };
     }
 
     response = await http.post(
-      Uri.parse('https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/workflows/$id/dispatches'),
+      Uri.parse(
+          'https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/workflows/$id/dispatches'),
       headers: <String, String>{
         'X-GitHub-Api-Version': '2022-11-28',
         'Authorization': 'Bearer ${storage['gh_token']}',

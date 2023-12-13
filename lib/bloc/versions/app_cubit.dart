@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'app_state.dart';
+import 'package:statuspage/bloc/versions/app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit({
@@ -16,27 +15,26 @@ class AppCubit extends Cubit<AppState> {
         ));
 
   void addRepo(repoName, version) {
-    state.repoVersion.update(repoName, (value) => version, ifAbsent: () => version);
+    state.repoVersion
+        .update(repoName, (value) => version, ifAbsent: () => version);
     return emit(state.copyWith(repoVersion: state.repoVersion));
   }
 
-
   void addDev(repoName, version) {
-    state.devVersion.update(repoName, (value) => version, ifAbsent: () => version);
+    state.devVersion
+        .update(repoName, (value) => version, ifAbsent: () => version);
     return emit(state.copyWith(devVersion: state.devVersion));
   }
 
-
   void addUat(repoName, version) {
-    state.uatVersion.update(repoName, (value) => version, ifAbsent: () => version);
+    state.uatVersion
+        .update(repoName, (value) => version, ifAbsent: () => version);
     return emit(state.copyWith(uatVersion: state.uatVersion));
   }
 
   void addProd(repoName, version) {
-    state.prodVersion.update(repoName, (value) => version, ifAbsent: () => version);
+    state.prodVersion
+        .update(repoName, (value) => version, ifAbsent: () => version);
     return emit(state.copyWith(prodVersion: state.prodVersion));
   }
-
-
-
 }

@@ -20,7 +20,8 @@ class LinkCell extends StatelessWidget {
               tooltip: 'Repository',
               icon: const FaIcon(FontAwesomeIcons.github),
               onPressed: () {
-                var url = Uri.parse('https://github.com/pagopa/${project['repository']}');
+                var url = Uri.parse(
+                    'https://github.com/pagopa/${project['repository']}');
                 launchUrl(url);
               })),
       Material(

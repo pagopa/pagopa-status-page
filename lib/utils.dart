@@ -58,7 +58,6 @@ int compareTo(String semanticVersion1, String semanticVersion2) {
 
     return 0;
   } catch (e) {
-    print(e);
     return -2;
   }
 }
