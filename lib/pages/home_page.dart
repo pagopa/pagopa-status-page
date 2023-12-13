@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:statuspage/bloc/settings/settings_state.dart';
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/pages/status_page.dart';
 
@@ -46,15 +47,15 @@ class HomePageState extends State<HomePage> {
       actions: <Widget>[
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: BlocBuilder<SettingsCubit, bool>(
-            builder: (context, darkTheme) {
+          child: BlocBuilder<SettingsCubit, SettingsState>(
+            builder: (context, state) {
               return Switch(
-                value: darkTheme,
+                value: state.darkTheme,
                 onChanged: (value) {
                   context.read<SettingsCubit>().toggle();
                 },
                 thumbIcon: MaterialStateProperty.resolveWith((states) {
-                  if (!darkTheme) {
+                  if (!state.darkTheme) {
                     return const Icon(Icons.light_mode);
                   }
                   return const Icon(Icons.dark_mode);
@@ -64,8 +65,11 @@ class HomePageState extends State<HomePage> {
           ),
         ),
         StreamBuilder(
-            stream: asyncPeriodic(const Duration(minutes: 1),
-                (count) => ReadCache.getString(key: lastUpdatedKey)),
+            stream: asyncPeriodic(const Duration(minutes: 1), (count) async {
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              return prefs.getString(lastUpdatedKey);
+            }),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return const Center(
@@ -134,16 +138,17 @@ class HomePageState extends State<HomePage> {
   }
 
   void emptyCache() {
-    projectsCore.forEach((name, info) {
+    projectsCore.forEach((name, info) async {
       var key1 = "${info['product']}-info-DEV";
       var key2 = "${info['product']}-info-UAT";
       var key3 = "${info['product']}-info-PROD";
       var key4 = "${info['product']}-release";
-      DeleteCache.deleteKey(key1);
-      DeleteCache.deleteKey(key2);
-      DeleteCache.deleteKey(key3);
-      DeleteCache.deleteKey(key4);
-      DeleteCache.deleteKey(lastUpdatedKey);
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove(key1);
+      prefs.remove(key2);
+      prefs.remove(key3);
+      prefs.remove(key4);
+      prefs.remove(lastUpdatedKey);
     });
   }
 }

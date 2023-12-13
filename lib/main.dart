@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:statuspage/bloc/settings/settings_cubit.dart';
+import 'package:statuspage/bloc/settings/settings_state.dart';
 import 'package:statuspage/bloc/versions/app_cubit.dart';
 import 'package:statuspage/pages/home_page.dart';
 
@@ -17,13 +18,16 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (BuildContext context) => SettingsCubit(),
+          create: (BuildContext context) => SettingsCubit()..loadSettings(),
         ),
         BlocProvider(
           create: (BuildContext context) => AppCubit(),
         ),
       ],
-      child: BlocBuilder<SettingsCubit, bool>(
+      child: BlocSelector<SettingsCubit, SettingsState, bool>(
+        selector: (state) {
+          return state.darkTheme;
+        },
         builder: (context, darkTheme) => buildMaterialApp(darkTheme),
       ),
     );
