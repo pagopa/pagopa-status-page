@@ -11,6 +11,8 @@ class StatusPage extends StatefulWidget {
 }
 
 class StatusPageState extends State<StatusPage> {
+  final Map<String, bool> _data = {};
+
   @override
   void initState() {
     super.initState();
@@ -35,8 +37,21 @@ class StatusPageState extends State<StatusPage> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: buildRows(),
+              child: ExpansionPanelList(
+                expansionCallback: (int index, bool isExpanded) {
+                  Map<String, List> aux = widget.projects;
+                  int i = 0;
+                  for (var m in aux.entries) {
+                    if (index == i) {
+                      setState(() {
+                        _data[m.key] = isExpanded;
+                      });
+                      break;
+                    }
+                    i++;
+                  }
+                },
+                children: buildAccordions(),
               ),
             ),
           ),
@@ -96,8 +111,27 @@ class StatusPageState extends State<StatusPage> {
   List<Widget> buildRows() {
     List<Widget> list = [];
     widget.projects.forEach((name, info) {
-      list.add(RowItem(name: name, project: info));
+      list.add(RowItem(project: info));
       list.add(const Divider());
+    });
+    return list;
+  }
+
+  List<ExpansionPanel> buildAccordions() {
+    List<ExpansionPanel> list = [];
+    widget.projects.forEach((namespace, List<dynamic> elements) {
+      list.add(ExpansionPanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return ListTile(
+              title: Text(namespace),
+            );
+          },
+          body: Column(
+            children: <Widget>[
+              ...elements.map((elem) => RowItem(project: elem))
+            ],
+          ),
+          isExpanded: _data[namespace] ?? false));
     });
     return list;
   }

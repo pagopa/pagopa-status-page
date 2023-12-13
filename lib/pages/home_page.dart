@@ -137,18 +137,20 @@ class HomePageState extends State<HomePage> {
     Navigator.popAndPushNamed(context, '/');
   }
 
-  void emptyCache() {
-    projectsCore.forEach((name, info) async {
-      var key1 = "${info['product']}-info-DEV";
-      var key2 = "${info['product']}-info-UAT";
-      var key3 = "${info['product']}-info-PROD";
-      var key4 = "${info['product']}-release";
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.remove(key1);
-      prefs.remove(key2);
-      prefs.remove(key3);
-      prefs.remove(key4);
-      prefs.remove(lastUpdatedKey);
+  Future<void> emptyCache() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    projectsCore.forEach((namespace, value) {
+      for (var repo in value) {
+        var key1 = "${repo['product']}-info-DEV";
+        var key2 = "${repo['product']}-info-UAT";
+        var key3 = "${repo['product']}-info-PROD";
+        var key4 = "${repo['product']}-release";
+        prefs.remove(key1);
+        prefs.remove(key2);
+        prefs.remove(key3);
+        prefs.remove(key4);
+      }
     });
+    prefs.remove(lastUpdatedKey);
   }
 }
