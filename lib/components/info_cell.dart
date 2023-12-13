@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:statuspage/bloc/app_cubit.dart';
-import 'package:statuspage/bloc/app_state.dart';
+import 'package:statuspage/bloc/versions/app_cubit.dart';
+import 'package:statuspage/bloc/versions/app_state.dart';
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/utils.dart';
 
-class FeCell extends StatelessWidget {
-  const FeCell({
+class InfoCell extends StatelessWidget {
+  const InfoCell({
     super.key,
     required this.env,
     this.project,
@@ -21,9 +21,8 @@ class FeCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String url = project['product'];
     return FutureBuilder(
-        future: getInfoFE(env, url),
+        future: getVersion(env),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           late List<Widget> children;
           if (snapshot.hasData) {
@@ -52,32 +51,6 @@ class FeCell extends StatelessWidget {
         });
   }
 
-  TextButton buildReleaseButton(env) {
-    if (env == 'UAT') {
-      return TextButton(
-        onPressed: () {
-          print('');
-        },
-        child: const Text('⬆️ New Releases'),
-      );
-    }
-    if (env == 'PROD') {
-      return TextButton(
-        onPressed: () {
-          print('');
-        },
-        child: const Text('➡️ Promote'),
-      );
-    }
-
-    return TextButton(
-      onPressed: () {
-        print('');
-      },
-      child: const Text('⏺️ Deploy'),
-    );
-  }
-
   List<Widget> buildLoading() {
     return const <Widget>[
       SizedBox(height: 20, width: 20, child: CircularProgressIndicator()),
@@ -95,9 +68,14 @@ class FeCell extends StatelessWidget {
         color: Colors.red,
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Text('Error: $message'),
-      ),
+          padding: const EdgeInsets.only(top: 16),
+          child: Tooltip(
+            message: '$message',
+            child: Text(
+              '$message',
+              overflow: TextOverflow.ellipsis,
+            ),
+          ))
     ];
   }
 
@@ -128,7 +106,7 @@ class FeCell extends StatelessWidget {
             ),
           ),
         ],
-      )
+      ),
     ];
   }
 
@@ -164,6 +142,43 @@ class FeCell extends StatelessWidget {
       );
     }
     return Container();
+  }
+
+  getVersion(String env) {
+    String url = project['product'];
+    if (project["type"] == "frontend") {
+      return getInfo(env, url);
+    } else {
+      return getInfoFE(env, url);
+    }
+  }
+
+  Future getInfo(String env, String product) async {
+    late String url;
+    if (env == 'DEV') {
+      url = apim_d + basePath + product;
+    }
+    if (env == 'UAT') {
+      url = apim_u + basePath + product;
+    }
+    if (env == 'PROD') {
+      url = apim_p + basePath + product;
+    }
+
+    var key = "${project['product']}-info-$env";
+    return remember(key, () async {
+      var response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+        return jsonDecode(response.body)['version'] ?? 'No Info Version';
+      } else {
+        if (response.bodyBytes.isEmpty) {
+          return 'Empty Body';
+        } else {
+          return response.statusCode;
+        }
+      }
+    });
   }
 
   getInfoFE(String env, String product) async {

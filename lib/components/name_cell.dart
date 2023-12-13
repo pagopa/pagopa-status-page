@@ -4,7 +4,7 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:statuspage/bloc/app_cubit.dart';
+import 'package:statuspage/bloc/versions/app_cubit.dart';
 import 'package:statuspage/utils.dart';
 
 class NameCell extends StatelessWidget {

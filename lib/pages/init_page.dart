@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:statuspage/pages/home_page.dart';
 
+@deprecated
 class InitPage extends StatefulWidget {
   const InitPage({Key? key}) : super(key: key);
 
@@ -75,7 +76,8 @@ class InitPageState extends State<InitPage> {
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomePage()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
                           );
                         },
                         child: const Text('Continua senza Token'),
@@ -93,7 +95,8 @@ class InitPageState extends State<InitPage> {
                           storage['gh_token'] = textController.text;
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomePage()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
                           );
                         },
                         child: const Text(
