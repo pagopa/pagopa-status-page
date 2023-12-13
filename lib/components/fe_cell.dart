@@ -1,8 +1,11 @@
 import 'dart:convert';
 
-import 'package:chaleno/chaleno.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:statuspage/bloc/app_cubit.dart';
+import 'package:statuspage/bloc/app_state.dart';
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/utils.dart';
 
@@ -24,7 +27,11 @@ class FeCell extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           late List<Widget> children;
           if (snapshot.hasData) {
-            children = buildOk(snapshot.data);
+            if (snapshot.data.contains('.')) {
+              children = buildOk(snapshot.data);
+            } else {
+              children = buildError(snapshot.data);
+            }
           } else if (snapshot.hasError) {
             children = buildError(snapshot.error);
           } else {
@@ -35,7 +42,10 @@ class FeCell extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: children,
+                children: [
+                  ...children,
+                  // buildReleaseButton(env)
+                ],
               ),
             ),
           );
@@ -97,16 +107,63 @@ class FeCell extends StatelessWidget {
         Icons.check_circle_outline,
         color: Colors.green,
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Tooltip(
-          message: '$version',
-          child: Text(
-            '$version',
-            overflow: TextOverflow.ellipsis,
-          ),)
-      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          BlocSelector<AppCubit, AppState, Map<String, String>>(
+              selector: (state) {
+            return state.repoVersion;
+          }, builder: (context, Map<String, String> repoVersion) {
+            return buildIcon(repoVersion[project['product']] ?? '', version);
+          }),
+          Flexible(
+            fit: FlexFit.loose,
+            child: Tooltip(
+              message: '$version',
+              child: Text(
+                '$version',
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ],
+      )
     ];
+  }
+
+  Widget buildIcon(String repoVersion, String version) {
+    if (compareTo(repoVersion, version) == -1) {
+      return const Tooltip(
+          message: 'versione maggiore rispetto al repository',
+          child: Icon(
+            Icons.arrow_upward,
+            color: Colors.red,
+          ));
+    }
+
+    if (compareTo(repoVersion, version) == 1) {
+      return const Tooltip(
+          message: 'versione minore rispetto al repository',
+          child: Icon(
+            Icons.arrow_downward,
+            color: Colors.orange,
+          ));
+    }
+    if (compareTo(repoVersion, version) == 0) {
+      return const Padding(
+        padding: EdgeInsets.only(right: 2.0),
+        child: Tooltip(
+          message: 'versione allineata al repository',
+          child: Icon(
+            FontAwesomeIcons.equals,
+            color: Colors.green,
+            size: 20,
+          ),
+        ),
+      );
+    }
+    return Container();
   }
 
   getInfoFE(String env, String product) async {
@@ -115,7 +172,7 @@ class FeCell extends StatelessWidget {
       url = apim_d + basePath + product;
     }
     if (env == 'UAT') {
-      url = apim_u +  basePath + product;
+      url = apim_u + basePath + product;
     }
     if (env == 'PROD') {
       url = apim_p + basePath + product;
