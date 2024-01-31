@@ -43,6 +43,8 @@ dependencies:
   intl: ^0.18.1
   shared_preferences: ^2.2.2
   flutter_bloc: ^8.1.3
+  github_signin_promax: ^0.0.7+2
+  github_sign_in_plus: ^0.0.2
 
 dev_dependencies:
   flutter_test:

@@ -6,10 +6,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:statuspage/bloc/settings/settings_state.dart';
 import 'package:statuspage/constant.dart';
 import 'package:statuspage/pages/status_page.dart';
+import 'package:statuspage/widgets/top_bar.dart';
 
 import '../bloc/settings/settings_cubit.dart';
 
 class HomePage extends StatefulWidget {
+  static const routeName = '/home';
+
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -32,10 +35,12 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(),
-      body: getTab(),
-      bottomNavigationBar: buildBottomBar(),
+    return SafeArea(
+      child: Scaffold(
+        appBar: TopBar(),
+        body: getTab(),
+        bottomNavigationBar: buildBottomBar(),
+      ),
     );
   }
 
