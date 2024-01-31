@@ -109,6 +109,7 @@ class HomePageState extends State<HomePage> {
       items: const [
         BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet_rounded), label: "Core"),
+        BottomNavigationBarItem(icon: Icon(Icons.account_box), label: "VAS"),
         BottomNavigationBarItem(
             icon: Icon(Icons.account_balance), label: "TouchPoint"),
       ],
@@ -122,6 +123,7 @@ class HomePageState extends State<HomePage> {
       index: _selectedIndex,
       children: const <Widget>[
         StatusPage(projects: projectsCore),
+        StatusPage(projects: projectsVAS),
         StatusPage(projects: projectsTouchPoint),
       ],
     );
