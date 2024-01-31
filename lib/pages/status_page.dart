@@ -126,6 +126,7 @@ class StatusPageState extends State<StatusPage> {
               title: Text(namespace),
             );
           },
+          canTapOnHeader: true,
           body: Column(
             children: <Widget>[
               ...elements.map((elem) => RowItem(project: elem))
