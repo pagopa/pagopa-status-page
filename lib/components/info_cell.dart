@@ -22,12 +22,13 @@ class InfoCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getVersion(env),
+        future: getVersion(context, env),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           late List<Widget> children;
           if (snapshot.hasData) {
             if (snapshot.data.contains('.')) {
               children = buildOk(snapshot.data);
+              saveInState(context, snapshot);
             } else {
               children = buildError(snapshot.data);
             }
@@ -49,6 +50,20 @@ class InfoCell extends StatelessWidget {
             ),
           );
         });
+  }
+
+  void saveInState(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+    if (context.mounted) {
+      if (env == "DEV") {
+        context.read<AppCubit>().addDev(project['product'], snapshot.data);
+      }
+      if (env == "UAT") {
+        context.read<AppCubit>().addUat(project['product'], snapshot.data);
+      }
+      if (env == "PROD") {
+        context.read<AppCubit>().addProd(project['product'], snapshot.data);
+      }
+    }
   }
 
   List<Widget> buildLoading() {
@@ -144,7 +159,7 @@ class InfoCell extends StatelessWidget {
     return Container();
   }
 
-  getVersion(String env) {
+  Future<String> getVersion(context, String env) {
     String url = project['product'];
     if (project["type"] == "frontend") {
       return getInfo(env, url);
@@ -153,7 +168,7 @@ class InfoCell extends StatelessWidget {
     }
   }
 
-  Future getInfo(String env, String product) async {
+  Future<String> getInfo(String env, String product) async {
     late String url;
     if (env == 'DEV') {
       url = apim_d + basePath + product;
@@ -181,7 +196,7 @@ class InfoCell extends StatelessWidget {
     });
   }
 
-  getInfoFE(String env, String product) async {
+  Future<String> getInfoFE(String env, String product) async {
     late String url;
     if (env == 'DEV') {
       url = apim_d + basePath + product;

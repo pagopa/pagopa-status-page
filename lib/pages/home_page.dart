@@ -11,7 +11,7 @@ import 'package:statuspage/widgets/top_bar.dart';
 import '../bloc/settings/settings_cubit.dart';
 
 class HomePage extends StatefulWidget {
-  static const routeName = '/home';
+  static const routeName = '/';
 
   const HomePage({Key? key}) : super(key: key);
 

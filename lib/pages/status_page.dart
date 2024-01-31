@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:statuspage/bloc/versions/app_cubit.dart';
+import 'package:statuspage/bloc/versions/app_state.dart';
 import 'package:statuspage/widgets/row_item.dart';
 
 class StatusPage extends StatefulWidget {
@@ -122,9 +125,57 @@ class StatusPageState extends State<StatusPage> {
     widget.projects.forEach((namespace, List<dynamic> elements) {
       list.add(ExpansionPanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
-            return ListTile(
-              title: Text(namespace),
-            );
+            return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.all(36.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                        flex: 1, fit: FlexFit.tight, child: Text(namespace)),
+                    Flexible(
+                        flex: 1,
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 10,
+                            ),
+                            buildIcon(state, "DEV", elements),
+                          ],
+                        ))),
+                    Flexible(
+                        flex: 1,
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 50,
+                            ),
+                            buildIcon(state, "UAT", elements),
+                          ],
+                        ))),
+                    Flexible(
+                        flex: 1,
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 90,
+                            ),
+                            buildIcon(state, "PROD", elements),
+                          ],
+                        ))),
+                    MediaQuery.of(context).size.width > 1200
+                        ? Flexible(flex: 1, child: Container())
+                        : Container()
+                  ],
+                ),
+              );
+            });
           },
           canTapOnHeader: true,
           body: Column(
@@ -135,5 +186,24 @@ class StatusPageState extends State<StatusPage> {
           isExpanded: _data[namespace] ?? false));
     });
     return list;
+  }
+
+  Icon buildIcon(state, String env, List<dynamic> elements) {
+    bool isOk = true;
+    for (var microservice in elements) {
+      if (env == "DEV") {
+        isOk &= state.devVersion.containsKey(microservice['product']);
+      }
+      if (env == "UAT") {
+        isOk &= state.uatVersion.containsKey(microservice['product']);
+      }
+      if (env == "PROD") {
+        isOk &= state.prodVersion.containsKey(microservice['product']);
+      }
+    }
+    return Icon(
+      isOk ? Icons.check : Icons.priority_high,
+      color: isOk ? Colors.green : Colors.red,
+    );
   }
 }

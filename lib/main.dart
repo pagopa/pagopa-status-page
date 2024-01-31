@@ -4,7 +4,6 @@ import 'package:statuspage/bloc/settings/settings_cubit.dart';
 import 'package:statuspage/bloc/settings/settings_state.dart';
 import 'package:statuspage/bloc/versions/app_cubit.dart';
 import 'package:statuspage/pages/home_page.dart';
-import 'package:statuspage/pages/login_page.dart';
 
 void main() async {
   runApp(MyApp());
@@ -43,9 +42,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: darkTheme ? Brightness.dark : Brightness.light,
       ),
-      initialRoute: LoginPage.routeName,
+      initialRoute: HomePage.routeName,
       routes: {
-        LoginPage.routeName: (context) => const LoginPage(),
+        // LoginPage.routeName: (context) => const LoginPage(),
         HomePage.routeName: (context) => const HomePage(),
       },
     );
