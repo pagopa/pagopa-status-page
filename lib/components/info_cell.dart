@@ -100,27 +100,30 @@ class InfoCell extends StatelessWidget {
         Icons.check_circle_outline,
         color: Colors.green,
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          BlocSelector<AppCubit, AppState, Map<String, String>>(
-              selector: (state) {
-            return state.repoVersion;
-          }, builder: (context, Map<String, String> repoVersion) {
-            return buildIcon(repoVersion[project['product']] ?? '', version);
-          }),
-          Flexible(
-            fit: FlexFit.loose,
-            child: Tooltip(
-              message: '$version',
-              child: Text(
-                '$version',
-                overflow: TextOverflow.ellipsis,
+      Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            BlocSelector<AppCubit, AppState, Map<String, String>>(
+                selector: (state) {
+              return state.repoVersion;
+            }, builder: (context, Map<String, String> repoVersion) {
+              return buildIcon(repoVersion[project['product']] ?? '', version);
+            }),
+            Flexible(
+              fit: FlexFit.loose,
+              child: Tooltip(
+                message: '$version',
+                child: Text(
+                  '$version',
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ];
   }

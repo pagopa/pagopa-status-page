@@ -139,7 +139,7 @@ class StatusPageState extends State<StatusPage> {
                             child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             buildIcon(state, "DEV", elements),
@@ -151,7 +151,7 @@ class StatusPageState extends State<StatusPage> {
                             child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 50,
                             ),
                             buildIcon(state, "UAT", elements),
@@ -163,7 +163,7 @@ class StatusPageState extends State<StatusPage> {
                             child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 90,
                             ),
                             buildIcon(state, "PROD", elements),
