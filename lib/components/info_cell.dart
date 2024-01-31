@@ -29,6 +29,9 @@ class InfoCell extends StatelessWidget {
             if (snapshot.data.contains('.')) {
               children = buildOk(snapshot.data);
               saveInState(context, snapshot);
+            } else if (snapshot.data.contains('Empty Body')) {
+              children = buildWarning(snapshot.data);
+              saveInState(context, snapshot);
             } else {
               children = buildError(snapshot.data);
             }
@@ -81,6 +84,24 @@ class InfoCell extends StatelessWidget {
       const Icon(
         Icons.error_outline,
         color: Colors.red,
+      ),
+      Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: Tooltip(
+            message: '$message',
+            child: Text(
+              '$message',
+              overflow: TextOverflow.ellipsis,
+            ),
+          ))
+    ];
+  }
+
+  List<Widget> buildWarning(message) {
+    return <Widget>[
+      const Icon(
+        Icons.check_circle_outline,
+        color: Colors.lime,
       ),
       Padding(
           padding: const EdgeInsets.only(top: 16),
