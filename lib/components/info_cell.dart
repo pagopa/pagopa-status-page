@@ -214,7 +214,7 @@ class InfoCell extends StatelessWidget {
         if (response.bodyBytes.isEmpty) {
           return 'Empty Body';
         } else {
-          return response.statusCode;
+          return response.statusCode.toString();
         }
       }
     });
@@ -240,7 +240,7 @@ class InfoCell extends StatelessWidget {
         if (response.bodyBytes.isEmpty) {
           return 'Empty Body';
         } else {
-          return response.statusCode;
+          return response.statusCode.toString();
         }
       }
     });

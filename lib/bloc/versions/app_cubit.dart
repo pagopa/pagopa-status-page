@@ -37,4 +37,9 @@ class AppCubit extends Cubit<AppState> {
         .update(repoName, (value) => version, ifAbsent: () => version);
     return emit(state.copyWith(prodVersion: state.prodVersion));
   }
+
+  void empty() {
+    return emit(state.copyWith(
+        repoVersion: {}, devVersion: {}, uatVersion: {}, prodVersion: {}));
+  }
 }

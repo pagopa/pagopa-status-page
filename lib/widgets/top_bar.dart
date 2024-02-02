@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:statuspage/bloc/settings/settings_state.dart';
+import 'package:statuspage/bloc/versions/app_cubit.dart';
 import 'package:statuspage/constant.dart';
 
 import '../bloc/settings/settings_cubit.dart';
@@ -98,7 +99,9 @@ class TopBarState extends State<TopBar> {
 
   void updateData() {
     emptyCache();
-    Navigator.popAndPushNamed(context, '/');
+    if (context.mounted) {
+      context.read<AppCubit>().empty();
+    }
   }
 
   Future<void> emptyCache() async {
