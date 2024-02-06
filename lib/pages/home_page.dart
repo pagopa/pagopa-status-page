@@ -140,16 +140,42 @@ class HomePageState extends State<HomePage> {
     return Stream.periodic(period, f).asyncMap((event) async => await event);
   }
 
-  void updateData() {
-    emptyCache();
+  void updateData() async {
+    await emptyCache();
+
     if (context.mounted) {
       context.read<AppCubit>().empty();
+      Navigator.popAndPushNamed(context, '/');
     }
   }
 
   Future<void> emptyCache() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     projectsCore.forEach((namespace, value) {
+      for (var repo in value) {
+        var key1 = "${repo['product']}-info-DEV";
+        var key2 = "${repo['product']}-info-UAT";
+        var key3 = "${repo['product']}-info-PROD";
+        var key4 = "${repo['product']}-release";
+        prefs.remove(key1);
+        prefs.remove(key2);
+        prefs.remove(key3);
+        prefs.remove(key4);
+      }
+    });
+    projectsTouchPoint.forEach((namespace, value) {
+      for (var repo in value) {
+        var key1 = "${repo['product']}-info-DEV";
+        var key2 = "${repo['product']}-info-UAT";
+        var key3 = "${repo['product']}-info-PROD";
+        var key4 = "${repo['product']}-release";
+        prefs.remove(key1);
+        prefs.remove(key2);
+        prefs.remove(key3);
+        prefs.remove(key4);
+      }
+    });
+    projectsVAS.forEach((namespace, value) {
       for (var repo in value) {
         var key1 = "${repo['product']}-info-DEV";
         var key2 = "${repo['product']}-info-UAT";

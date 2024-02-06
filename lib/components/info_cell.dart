@@ -28,10 +28,10 @@ class InfoCell extends StatelessWidget {
           if (snapshot.hasData) {
             if (snapshot.data.contains('.')) {
               children = buildOk(snapshot.data);
-              saveInState(context, snapshot);
+              saveInState(context, snapshot.data);
             } else if (snapshot.data.contains('Empty Body')) {
               children = buildWarning(snapshot.data);
-              saveInState(context, snapshot);
+              saveInState(context, snapshot.data);
             } else {
               children = buildError(snapshot.data);
             }
@@ -55,16 +55,16 @@ class InfoCell extends StatelessWidget {
         });
   }
 
-  void saveInState(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+  void saveInState(BuildContext context, String value) {
     if (context.mounted) {
       if (env == "DEV") {
-        context.read<AppCubit>().addDev(project['product'], snapshot.data);
+        context.read<AppCubit>().addDev(project['product'], value);
       }
       if (env == "UAT") {
-        context.read<AppCubit>().addUat(project['product'], snapshot.data);
+        context.read<AppCubit>().addUat(project['product'], value);
       }
       if (env == "PROD") {
-        context.read<AppCubit>().addProd(project['product'], snapshot.data);
+        context.read<AppCubit>().addProd(project['product'], value);
       }
     }
   }
@@ -115,7 +115,7 @@ class InfoCell extends StatelessWidget {
     ];
   }
 
-  List<Widget> buildOk(version) {
+  List<Widget> buildOk(String version) {
     return <Widget>[
       const Icon(
         Icons.check_circle_outline,
@@ -205,6 +205,18 @@ class InfoCell extends StatelessWidget {
     }
 
     var key = "${project['product']}-info-$env";
+
+    // var response = await http.get(Uri.parse(url));
+    //
+    // if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+    //   return jsonDecode(response.body)['version'] ?? 'No Info Version';
+    // } else {
+    //   if (response.bodyBytes.isEmpty) {
+    //     return 'Empty Body';
+    //   } else {
+    //     return response.statusCode.toString();
+    //   }
+    // }
     return remember(key, () async {
       var response = await http.get(Uri.parse(url));
 
