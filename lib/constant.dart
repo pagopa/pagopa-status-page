@@ -192,6 +192,15 @@ const projectsCore = {
       "env": "AKS",
       "actions": "GHA"
     },
+    {
+      "name": "GPD - Upload",
+      "product": "gpdupload",
+      "repository": "pagopa-gpd-upload",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-gpd-upload/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
     /* TODO un-comment this when response will be compliant
   "GPS - Donations": {
     "product": "gpsdonation",
