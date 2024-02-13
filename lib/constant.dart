@@ -220,17 +220,6 @@ const projectsCore = {
       "actions": "AZDO"
     },
   ],
-  "FdR": [
-    {
-      "name": "FdR - Nodo dei Pagamenti (New)",
-      "product": "fdrndpnew",
-      "repository": "pagopa-fdr",
-      "pipeline":
-          "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1224",
-      "env": "AKS",
-      "actions": "AZDO"
-    },
-  ],
   "Mocker": [
     {
       "name": "Mocker - Core",
@@ -249,6 +238,45 @@ const projectsCore = {
       "repository": "pagopa-mock-config-fe",
       "pipeline":
           "https://github.com/pagopa/pagopa-mock-config-fen/actions/workflows/release_deploy.yml",
+      "env": "AZ",
+      "actions": "GHA"
+    },
+  ],
+};
+
+const projectsNodo5 = {
+  "FdR": [
+    {
+      "name": "FdR - Nodo dei Pagamenti (New)",
+      "product": "fdrndpnew",
+      "repository": "pagopa-fdr",
+      "pipeline":
+          "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1224",
+      "env": "AKS",
+      "actions": "AZDO"
+    },
+  ],
+};
+
+const projectsVAS = {
+  "Back Office": [
+    {
+      "name": "BackOffice pagoPA - BackEnd",
+      "product": "backofficepagopa",
+      "host": "selfcare.%s/ui",
+      "repository": "pagopa-selfcare-ms-backoffice-backend",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-selfcare-ms-backoffice-backend/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "BackOffice pagoPA - FrontEnd",
+      "type": "frontend",
+      "product": "backofficepagopa-fe",
+      "repository": "pagopa-selfcare-frontend",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-selfcare-frontend/actions/workflows/release_deploy.yml",
       "env": "AZ",
       "actions": "GHA"
     },
@@ -309,31 +337,6 @@ const projectsCore = {
       "actions": "GHA"
     },
   ]
-};
-
-const projectsVAS = {
-  "Back Office": [
-    {
-      "name": "BackOffice pagoPA - BackEnd",
-      "product": "backofficepagopa",
-      "host": "selfcare.%s/ui",
-      "repository": "pagopa-selfcare-ms-backoffice-backend",
-      "pipeline":
-          "https://github.com/pagopa/pagopa-selfcare-ms-backoffice-backend/actions/workflows/release_deploy.yml",
-      "env": "AKS",
-      "actions": "GHA"
-    },
-    {
-      "name": "BackOffice pagoPA - FrontEnd",
-      "type": "frontend",
-      "product": "backofficepagopa-fe",
-      "repository": "pagopa-selfcare-frontend",
-      "pipeline":
-          "https://github.com/pagopa/pagopa-selfcare-frontend/actions/workflows/release_deploy.yml",
-      "env": "AZ",
-      "actions": "GHA"
-    },
-  ],
 };
 
 const projectsTouchPoint = {
