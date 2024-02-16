@@ -206,30 +206,19 @@ class InfoCell extends StatelessWidget {
 
     var key = "${project['product']}-info-$env";
 
-    // var response = await http.get(Uri.parse(url));
-    //
-    // if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
-    //   return jsonDecode(response.body)['version'] ?? 'No Info Version';
-    // } else {
-    //   if (response.bodyBytes.isEmpty) {
-    //     return 'Empty Body';
-    //   } else {
-    //     return response.statusCode.toString();
-    //   }
-    // }
-    return remember(key, () async {
-      var response = await http.get(Uri.parse(url));
+    // return remember(key, () async {
+    var response = await http.get(Uri.parse(url));
 
-      if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
-        return jsonDecode(response.body)['version'] ?? 'No Info Version';
+    if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+      return jsonDecode(response.body)['version'] ?? 'No Info Version';
+    } else {
+      if (response.bodyBytes.isEmpty) {
+        return 'Empty Body';
       } else {
-        if (response.bodyBytes.isEmpty) {
-          return 'Empty Body';
-        } else {
-          return response.statusCode.toString();
-        }
+        return response.statusCode.toString();
       }
-    });
+    }
+    // });
   }
 
   Future<String> getInfoFE(String env, String product) async {
@@ -244,17 +233,17 @@ class InfoCell extends StatelessWidget {
       url = apim_p + basePath + product;
     }
     var key = "${project['product']}-info-$env";
-    return remember(key, () async {
-      var response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
-        return jsonDecode(response.body)['version'] ?? 'No Info Version';
+    // return remember(key, () async {
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+      return jsonDecode(response.body)['version'] ?? 'No Info Version';
+    } else {
+      if (response.bodyBytes.isEmpty) {
+        return 'Empty Body';
       } else {
-        if (response.bodyBytes.isEmpty) {
-          return 'Empty Body';
-        } else {
-          return response.statusCode.toString();
-        }
+        return response.statusCode.toString();
       }
-    });
+    }
+    // });
   }
 }
