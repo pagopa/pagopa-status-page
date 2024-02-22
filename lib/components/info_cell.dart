@@ -34,11 +34,14 @@ class InfoCell extends StatelessWidget {
               saveInState(context, snapshot.data);
             } else {
               children = buildError(snapshot.data);
+              saveInState(context, "ERROR");
             }
           } else if (snapshot.hasError) {
             children = buildError(snapshot.error);
+            saveInState(context, "ERROR");
           } else {
             children = buildLoading();
+            saveInState(context, "LOADING");
           }
           return Center(
             child: Padding(

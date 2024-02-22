@@ -188,22 +188,47 @@ class StatusPageState extends State<StatusPage> {
     return list;
   }
 
-  Icon buildIcon(state, String env, List<dynamic> elements) {
-    bool isOk = true;
+  Icon buildIcon(AppState state, String env, List<dynamic> elements) {
+    String status = "OK";
     for (var microservice in elements) {
+      String value = "";
       if (env == "DEV") {
-        isOk &= state.devVersion.containsKey(microservice['product']);
+        value = state.devVersion.keys.firstWhere(
+            (elem) => elem == microservice['product'],
+            orElse: () => "LOADING");
       }
       if (env == "UAT") {
-        isOk &= state.uatVersion.containsKey(microservice['product']);
+        value = state.devVersion.keys.firstWhere(
+            (elem) => elem == microservice['product'],
+            orElse: () => "");
       }
       if (env == "PROD") {
-        isOk &= state.prodVersion.containsKey(microservice['product']);
+        value = state.devVersion.keys.firstWhere(
+            (elem) => elem == microservice['product'],
+            orElse: () => "");
+      }
+      if (value == "LOADING" && status != "ERROR") {
+        status = value;
+      }
+      if (value == "ERROR") {
+        status = value;
       }
     }
-    return Icon(
-      isOk ? Icons.check : Icons.priority_high,
-      color: isOk ? Colors.green : Colors.red,
-    );
+    if (status == "OK") {
+      return const Icon(
+        Icons.check,
+        color: Colors.green,
+      );
+    } else if (status == "ERROR") {
+      return const Icon(
+        Icons.priority_high,
+        color: Colors.red,
+      );
+    } else {
+      return const Icon(
+        Icons.downloading,
+        color: Colors.blue,
+      );
+    }
   }
 }
