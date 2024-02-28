@@ -189,37 +189,31 @@ class StatusPageState extends State<StatusPage> {
   }
 
   Icon buildIcon(AppState state, String env, List<dynamic> elements) {
-    String status = "OK";
+    int oks = 0;
+    int errors = 0;
     for (var microservice in elements) {
-      String value = "";
+      String? value;
       if (env == "DEV") {
-        value = state.devVersion.keys.firstWhere(
-            (elem) => elem == microservice['product'],
-            orElse: () => "LOADING");
+        value = state.devVersion[microservice['product']];
       }
       if (env == "UAT") {
-        value = state.devVersion.keys.firstWhere(
-            (elem) => elem == microservice['product'],
-            orElse: () => "");
+        value = state.uatVersion[microservice['product']];
       }
       if (env == "PROD") {
-        value = state.devVersion.keys.firstWhere(
-            (elem) => elem == microservice['product'],
-            orElse: () => "");
-      }
-      if (value == "LOADING" && status != "ERROR") {
-        status = value;
+        value = state.prodVersion[microservice['product']];
       }
       if (value == "ERROR") {
-        status = value;
+        errors += 1;
+      } else if (value != "LOADING") {
+        oks += 1;
       }
     }
-    if (status == "OK") {
+    if (oks == elements.length) {
       return const Icon(
         Icons.check,
         color: Colors.green,
       );
-    } else if (status == "ERROR") {
+    } else if (errors > 0) {
       return const Icon(
         Icons.priority_high,
         color: Colors.red,
