@@ -33,8 +33,7 @@ class RowItemState extends State<RowItem> {
           Flexible(
               flex: 1,
               fit: FlexFit.tight,
-              child: NameCell(
-                  name: widget.project['name'], project: widget.project)),
+              child: NameCell(project: widget.project)),
           Flexible(
               flex: 1, child: InfoCell(env: "DEV", project: widget.project)),
           Flexible(

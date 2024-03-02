@@ -1,3 +1,5 @@
+
+
 const dns_d = "dev.platform.pagopa.it";
 const dns_u = "uat.platform.pagopa.it";
 const dns_p = "platform.pagopa.it";
@@ -10,7 +12,7 @@ const basePath = "/shared/statuspage/v1/info?product=";
 
 const lastUpdatedKey = "last-updated";
 
-const projectsCore = {
+const Map<String, List<Map<String, String>>> projectsCore = {
   "Api Config": [
     {
       "name": "ApiConfig - Cacher (Oracle)",

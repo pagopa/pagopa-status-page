@@ -5,9 +5,9 @@ import 'package:statuspage/bloc/versions/app_state.dart';
 import 'package:statuspage/widgets/row_item.dart';
 
 class StatusPage extends StatefulWidget {
-  const StatusPage({Key? key, this.projects}) : super(key: key);
+  const StatusPage({Key? key, required this.projects}) : super(key: key);
 
-  final dynamic projects;
+  final Map<String, List<Map<String, String>>> projects;
 
   @override
   StatusPageState createState() => StatusPageState();
@@ -31,7 +31,7 @@ class StatusPageState extends State<StatusPage> {
     return buildTable();
   }
 
-  Column buildTable() {
+  Widget buildTable() {
     return Column(
       children: [
         buildHeader(),
@@ -204,7 +204,7 @@ class StatusPageState extends State<StatusPage> {
       }
       if (value == "ERROR") {
         errors += 1;
-      } else if (value != "LOADING") {
+      } else if (value != null) {
         oks += 1;
       }
     }

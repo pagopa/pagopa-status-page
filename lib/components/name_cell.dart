@@ -1,20 +1,14 @@
-import 'dart:convert';
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:statuspage/bloc/versions/app_cubit.dart';
-import 'package:statuspage/utils.dart';
+import 'package:statuspage/bloc/versions/app_state.dart';
 
 class NameCell extends StatelessWidget {
   const NameCell({
     super.key,
-    this.name,
     this.project,
   });
 
-  final dynamic name;
   final dynamic project;
 
   @override
@@ -29,20 +23,18 @@ class NameCell extends StatelessWidget {
     );
   }
 
-  FutureBuilder<String> buildRepoVersion(context) {
-    return FutureBuilder(
-      future: fetchRelease(context, project['repository']),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
+  buildRepoVersion(context) {
+    return BlocSelector<AppCubit, AppState, Map<String, String>>(
+      selector: (state) => state.repoVersion,
+      builder: (context, repoVersion) {
+        if (repoVersion.isNotEmpty) {
           return Tooltip(
-            message: snapshot.data!,
+            message: repoVersion[project['product']] ?? '',
             child: Text(
-              snapshot.data!,
+              repoVersion[project['product']] ?? '',
               overflow: TextOverflow.ellipsis,
             ),
           );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
         }
         // By default, show a loading spinner.
         return const SizedBox(
@@ -53,9 +45,9 @@ class NameCell extends StatelessWidget {
 
   Tooltip buildName() {
     return Tooltip(
-      message: '$name',
+      message: project['name'],
       child: Text(
-        '$name',
+        project['name'],
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         overflow: TextOverflow.ellipsis,
       ),
@@ -107,34 +99,6 @@ class NameCell extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<String> fetchRelease(BuildContext context, repository) async {
-    final Storage storage = window.localStorage;
-
-    var key = "${project['product']}-release";
-    var version = await remember(key, () async {
-      http.Response response;
-      if (storage['gh_token'] != null) {
-        response = await http.get(
-          Uri.parse(
-              'https://api.github.com/repos/pagopa/$repository/releases/latest'),
-          headers: <String, String>{
-            'X-GitHub-Api-Version': '2022-11-28',
-            'Authorization': 'Bearer ${storage['gh_token']}',
-            'Accept': 'application/vnd.github+json'
-          },
-        ); // there are limitation 60 requests per hour
-      } else {
-        response = await http.get(Uri.parse(
-            'https://api.github.com/repos/pagopa/$repository/releases/latest')); // there are limitation 60 requests per hour
-      }
-      return jsonDecode(response.body)['tag_name'] ?? 'No Release';
-    });
-    if (context.mounted) {
-      context.read<AppCubit>().addRepo(project['product'], version);
-    }
-    return version;
   }
 
   buildExtraLabel(context) {

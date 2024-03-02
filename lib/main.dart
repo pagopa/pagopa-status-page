@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => SettingsCubit()..loadSettings(),
         ),
         BlocProvider(
-          create: (BuildContext context) => AppCubit(),
+          create: (BuildContext context) => AppCubit()..addAll(),
         ),
       ],
       child: BlocSelector<SettingsCubit, SettingsState, bool>(
@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: HomePage.routeName,
       routes: {
-        // LoginPage.routeName: (context) => const LoginPage(),
         HomePage.routeName: (context) => const HomePage(),
       },
     );

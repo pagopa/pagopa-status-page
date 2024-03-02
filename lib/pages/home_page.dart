@@ -145,10 +145,10 @@ class HomePageState extends State<HomePage> {
   void updateData() async {
     await emptyCache();
 
-    if (context.mounted) {
-      context.read<AppCubit>().empty();
-      Navigator.popAndPushNamed(context, '/');
-    }
+    // if (context.mounted) {
+    context.read<AppCubit>().empty();
+    Navigator.pop(context);
+    // }
   }
 
   Future<void> emptyCache() async {

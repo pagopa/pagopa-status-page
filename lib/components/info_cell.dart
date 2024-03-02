@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:statuspage/bloc/versions/app_cubit.dart';
 import 'package:statuspage/bloc/versions/app_state.dart';
-import 'package:statuspage/constant.dart';
 import 'package:statuspage/utils.dart';
 
 class InfoCell extends StatelessWidget {
@@ -21,55 +17,32 @@ class InfoCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getVersion(context, env),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          late List<Widget> children;
-          if (snapshot.hasData) {
-            if (snapshot.data.contains('.')) {
-              children = buildOk(snapshot.data);
-              saveInState(context, snapshot.data);
-            } else if (snapshot.data.contains('Empty Body')) {
-              children = buildWarning(snapshot.data);
-              saveInState(context, snapshot.data);
-            } else {
-              children = buildError(snapshot.data);
-              saveInState(context, "ERROR");
-            }
-          } else if (snapshot.hasError) {
-            children = buildError(snapshot.error);
-            saveInState(context, "ERROR");
-          } else {
-            children = buildLoading();
-            saveInState(context, "LOADING");
-          }
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ...children,
-                  // buildReleaseButton(env)
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  void saveInState(BuildContext context, String value) {
-    if (context.mounted) {
-      if (env == "DEV") {
-        context.read<AppCubit>().addDev(project['product'], value);
+    return BlocBuilder<AppCubit, AppState>(
+        builder: (BuildContext context, state) {
+      late List<Widget> children;
+      String? version = state.devVersion[project['product']];
+      if (version != null) {
+        if (version != 'ERROR') {
+          children = buildOk(version, state);
+        } else {
+          children = buildError(version);
+        }
+      } else {
+        children = buildLoading();
       }
-      if (env == "UAT") {
-        context.read<AppCubit>().addUat(project['product'], value);
-      }
-      if (env == "PROD") {
-        context.read<AppCubit>().addProd(project['product'], value);
-      }
-    }
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...children,
+              // buildReleaseButton(env)
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   List<Widget> buildLoading() {
@@ -118,7 +91,7 @@ class InfoCell extends StatelessWidget {
     ];
   }
 
-  List<Widget> buildOk(String version) {
+  List<Widget> buildOk(String version, state) {
     return <Widget>[
       const Icon(
         Icons.check_circle_outline,
@@ -130,12 +103,7 @@ class InfoCell extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            BlocSelector<AppCubit, AppState, Map<String, String>>(
-                selector: (state) {
-              return state.repoVersion;
-            }, builder: (context, Map<String, String> repoVersion) {
-              return buildIcon(repoVersion[project['product']] ?? '', version);
-            }),
+            buildIcon(state.repoVersion[project['product']] ?? '', version),
             Flexible(
               fit: FlexFit.loose,
               child: Tooltip(
@@ -153,6 +121,7 @@ class InfoCell extends StatelessWidget {
   }
 
   Widget buildIcon(String repoVersion, String version) {
+    repoVersion = repoVersion.replaceFirst('Release ', '');
     if (compareTo(repoVersion, version) == -1) {
       return const Tooltip(
           message: 'versione maggiore rispetto al repository',
@@ -184,69 +153,5 @@ class InfoCell extends StatelessWidget {
       );
     }
     return Container();
-  }
-
-  Future<String> getVersion(context, String env) {
-    String url = project['product'];
-    if (project["type"] == "frontend") {
-      return getInfo(env, url);
-    } else {
-      return getInfoFE(env, url);
-    }
-  }
-
-  Future<String> getInfo(String env, String product) async {
-    late String url;
-    if (env == 'DEV') {
-      url = apim_d + basePath + product;
-    }
-    if (env == 'UAT') {
-      url = apim_u + basePath + product;
-    }
-    if (env == 'PROD') {
-      url = apim_p + basePath + product;
-    }
-
-    var key = "${project['product']}-info-$env";
-
-    // return remember(key, () async {
-    var response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
-      return jsonDecode(response.body)['version'] ?? 'No Info Version';
-    } else {
-      if (response.bodyBytes.isEmpty) {
-        return 'Empty Body';
-      } else {
-        return response.statusCode.toString();
-      }
-    }
-    // });
-  }
-
-  Future<String> getInfoFE(String env, String product) async {
-    late String url;
-    if (env == 'DEV') {
-      url = apim_d + basePath + product;
-    }
-    if (env == 'UAT') {
-      url = apim_u + basePath + product;
-    }
-    if (env == 'PROD') {
-      url = apim_p + basePath + product;
-    }
-    var key = "${project['product']}-info-$env";
-    // return remember(key, () async {
-    var response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
-      return jsonDecode(response.body)['version'] ?? 'No Info Version';
-    } else {
-      if (response.bodyBytes.isEmpty) {
-        return 'Empty Body';
-      } else {
-        return response.statusCode.toString();
-      }
-    }
-    // });
   }
 }
