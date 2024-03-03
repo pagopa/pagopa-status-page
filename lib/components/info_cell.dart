@@ -20,10 +20,23 @@ class InfoCell extends StatelessWidget {
     return BlocBuilder<AppCubit, AppState>(
         builder: (BuildContext context, state) {
       late List<Widget> children;
-      String? version = state.devVersion[project['product']];
+      String? version;
+      if (env == 'DEV') {
+        version = state.devVersion[project['product']];
+      }
+      if (env == 'UAT') {
+        version = state.uatVersion[project['product']];
+      }
+      if (env == 'PROD') {
+        version = state.prodVersion[project['product']];
+      }
       if (version != null) {
         if (version != 'ERROR') {
-          children = buildOk(version, state);
+          if (version.contains('.')) {
+            children = buildOk(version, state);
+          } else {
+            children = buildWarning(version);
+          }
         } else {
           children = buildError(version);
         }
