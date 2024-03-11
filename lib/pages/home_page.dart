@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html' as html show window;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -145,10 +146,9 @@ class HomePageState extends State<HomePage> {
   void updateData() async {
     await emptyCache();
 
-    // if (context.mounted) {
     context.read<AppCubit>().empty();
+    html.window.location.reload();
     Navigator.pop(context);
-    // }
   }
 
   Future<void> emptyCache() async {
