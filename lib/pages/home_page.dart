@@ -128,7 +128,7 @@ class HomePageState extends State<HomePage> {
         StatusPage(projects: projectsCore),
         StatusPage(projects: projectsNodo5),
         StatusPage(projects: projectsVAS),
-        StatusPage(projects: projectsTouchPoint),
+        // StatusPage(projects: projectsTouchPoint),
       ],
     );
   }

@@ -23,7 +23,7 @@ class AppCubit extends Cubit<AppState> {
     addTeamProject(projectsCore);
     addTeamProject(projectsNodo5);
     addTeamProject(projectsVAS);
-    addTeamProject(projectsTouchPoint);
+    // addTeamProject(projectsTouchPoint);
   }
 
   void addTeamProject(teamProject) {
