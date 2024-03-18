@@ -291,6 +291,16 @@ const projectsVAS = {
       "env": "AZ",
       "actions": "GHA"
     },
+    {
+      "name": "BackOffice External",
+      "product": "backofficeexternalpagopa",
+      "host": "selfcare.%s/ui",
+      "repository": "pagopa-backoffice-external",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-backoffice-external/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
   ],
   "PDF": [
     {
