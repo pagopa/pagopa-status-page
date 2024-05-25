@@ -96,9 +96,9 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "product": "authorizer",
       "repository": "pagopa-platform-authorizer",
       "pipeline":
-          "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1299",
-      "env": "AZ",
-      "actions": "AZDO"
+          "https://github.com/pagopa/pagopa-platform-authorizer/actions/workflows/release_deploy_aks.yml",
+      "env": "AKS",
+      "actions": "GHA"
     },
     {
       "name": "Authorizer Configurator",
