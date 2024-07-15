@@ -159,6 +159,15 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "actions": "GHA"
     },
     {
+      "name": "GPD - Payments Pull",
+      "product": "gpdpaymentspull",
+      "repository": "pagopa-gpd-payments-pull",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-gpd-payments-pull/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
       "name": "GPD - Reporting Analysis",
       "product": "gpdreportinganalysis",
       "repository": "pagopa-gpd-reporting-analysis",
