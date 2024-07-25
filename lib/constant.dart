@@ -391,6 +391,33 @@ const projectsVAS = {
       "env": "AKS",
       "actions": "GHA"
     },
+    {
+      "name": "Print Notice - Service",
+      "product": "printpaymentnoticeservice",
+      "repository": "print-payment-notice-service",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-print-payment-notice-service/actions/workflows/release-deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "Print Notice - Generator",
+      "product": "printpaymentnoticegenerator",
+      "repository": "pagopa-print-payment-notice-functions",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-print-payment-notice-generator/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "Print Notice - Functions",
+      "product": "printpaymentnoticefunctions",
+      "repository": "pagopa-print-payment-notice-functions",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-print-payment-notice-functions/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
   ]
 };
 
