@@ -1,5 +1,3 @@
-
-
 const dns_d = "dev.platform.pagopa.it";
 const dns_u = "uat.platform.pagopa.it";
 const dns_p = "platform.pagopa.it";
@@ -265,43 +263,46 @@ const Map<String, List<Map<String, String>>> projectsCore = {
 };
 
 const projectsNodo5 = {
-    "FdR": [
-        {
-          "name": "FdR - Nodo dei Pagamenti (New)",
-          "product": "fdrndpnew",
-          "repository": "pagopa-fdr",
-          "pipeline":
-              "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1224",
-          "env": "AKS",
-          "actions": "AZDO"
-        },
-    ],
-    "WISP-Converter": [
-        {
-          "name": "WISP Converter",
-          "product": "wispconverter",
-          "repository": "pagopa-wisp-converter",
-          "pipeline": "https://github.com/pagopa/pagopa-wisp-converter/actions/workflows/04_release_deploy.yml",
-          "env": "AKS",
-          "actions": "GHA"
-        },
-        {
-          "name": "WISP SOAP Converter",
-          "product": "wispsoapconverter",
-          "repository": "pagopa-wisp-soap-converter",
-          "pipeline": "https://github.com/pagopa/pagopa-wisp-soap-converter/actions/workflows/release_deploy.yml",
-          "env": "AKS",
-          "actions": "GHA"
-        },
-        {
-          "name": "WISP Converter Technical Support",
-          "product": "wispconverterts",
-          "repository": "pagopa-wisp-converter-technical-support",
-          "pipeline": "https://github.com/pagopa/pagopa-wisp-converter-technical-support/actions/workflows/04_release_deploy.yml",
-          "env": "AKS",
-          "actions": "GHA"
-        },
-    ]
+  "FdR": [
+    {
+      "name": "FdR - Nodo dei Pagamenti (New)",
+      "product": "fdrndpnew",
+      "repository": "pagopa-fdr",
+      "pipeline":
+          "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1224",
+      "env": "AKS",
+      "actions": "AZDO"
+    },
+  ],
+  "WISP-Converter": [
+    {
+      "name": "WISP Converter",
+      "product": "wispconverter",
+      "repository": "pagopa-wisp-converter",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-wisp-converter/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "WISP SOAP Converter",
+      "product": "wispsoapconverter",
+      "repository": "pagopa-wisp-soap-converter",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-wisp-soap-converter/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "WISP Converter Technical Support",
+      "product": "wispconverterts",
+      "repository": "pagopa-wisp-converter-technical-support",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-wisp-converter-technical-support/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+  ]
 };
 
 const projectsVAS = {
@@ -336,7 +337,7 @@ const projectsVAS = {
       "actions": "GHA"
     },
   ],
-  "PDF": [
+  "Ricevute PDF": [
     {
       "name": "PDF Engine",
       "product": "pdfengine",
@@ -390,7 +391,9 @@ const projectsVAS = {
           "https://github.com/pagopa/pagopa-receipt-pdf-helpdesk/actions/workflows/release_deploy.yml",
       "env": "AKS",
       "actions": "GHA"
-    },
+    }
+  ],
+  "Stampa Avvisi": [
     {
       "name": "Print Notice - Service",
       "product": "printpaymentnoticeservice",
