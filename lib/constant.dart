@@ -397,7 +397,7 @@ const projectsVAS = {
     {
       "name": "Print Notice - Service",
       "product": "printpaymentnoticeservice",
-      "repository": "print-payment-notice-service",
+      "repository": "pagopa-print-payment-notice-service",
       "pipeline":
           "https://github.com/pagopa/pagopa-print-payment-notice-service/actions/workflows/release-deploy.yml",
       "env": "AKS",
