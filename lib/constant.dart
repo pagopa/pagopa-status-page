@@ -406,7 +406,7 @@ const projectsVAS = {
     {
       "name": "Print Notice - Generator",
       "product": "printpaymentnoticegenerator",
-      "repository": "pagopa-print-payment-notice-functions",
+      "repository": "pagopa-print-payment-notice-generator",
       "pipeline":
           "https://github.com/pagopa/pagopa-print-payment-notice-generator/actions/workflows/release_deploy.yml",
       "env": "AKS",
