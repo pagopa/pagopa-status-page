@@ -260,6 +260,17 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "actions": "GHA"
     },
   ],
+    "OdP": [
+      {
+        "name": "OdP - Payment Options Service",
+        "product": "paymentoptionsservice",
+        "repository": "pagopa-payment-options-service",
+        "pipeline":
+            "https://github.com/pagopa/pagopa-payment-options-service/actions/workflows/release_deploy.yml",
+        "env": "AKS",
+        "actions": "GHA"
+      },
+  ]
 };
 
 const projectsNodo5 = {
