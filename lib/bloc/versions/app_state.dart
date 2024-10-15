@@ -18,10 +18,18 @@ class AppState {
     Map<String, String>? prodVersion,
   }) {
     return AppState(
-      repoVersion: repoVersion ?? this.repoVersion,
-      devVersion: devVersion ?? this.devVersion,
-      uatVersion: uatVersion ?? this.uatVersion,
-      prodVersion: prodVersion ?? this.prodVersion,
+      repoVersion: repoVersion != null
+          ? Map<String, String>.from(repoVersion)
+          : this.repoVersion,
+      devVersion: devVersion != null
+          ? Map<String, String>.from(devVersion)
+          : this.devVersion,
+      uatVersion: uatVersion != null
+          ? Map<String, String>.from(uatVersion)
+          : this.uatVersion,
+      prodVersion: prodVersion != null
+          ? Map<String, String>.from(prodVersion)
+          : this.prodVersion,
     );
   }
 }

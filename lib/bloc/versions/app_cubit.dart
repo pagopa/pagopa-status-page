@@ -41,7 +41,7 @@ class AppCubit extends Cubit<AppState> {
 
   Future<void> addRepo(project) async {
     var parser = await Chaleno()
-        .load('https://github.com/pagopa/${project['repository']}');
+        .load('${apim_u}/shared/statuspage/v1/github/pagopa/${project['repository']}');
     List<Result>? results = parser?.getElementsByClassName(
         'css-truncate css-truncate-target text-bold mr-2');
     var version = results?.first.text ?? 'ERROR';
