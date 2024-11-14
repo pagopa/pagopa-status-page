@@ -237,6 +237,15 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "env": "AZ",
       "actions": "AZDO"
     },
+    {
+      "name": "GPD - Ingestion Manager",
+      "product": "gpdingestionmanager",
+      "repository": "pagopa-gpd-ingestion-manager",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-gpd-ingestion-manager/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
   ],
   "Mocker": [
     {
