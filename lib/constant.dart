@@ -280,6 +280,26 @@ const Map<String, List<Map<String, String>>> projectsCore = {
         "actions": "GHA"
       },
   ]
+    "eBollo": [
+      {
+        "name": "eBollo - MBD Service",
+        "product": "mbdservice",
+        "repository": "pagopa-mbd-service",
+        "pipeline":
+            "https://github.com/pagopa/pagopa-mbd-service/actions/workflows/release_deploy.yml",
+        "env": "AKS",
+        "actions": "GHA"
+      },
+      {
+        "name": "eBollo - MBD GPS Service",
+        "product": "mbdgpsservice",
+        "repository": "pagopa-gps-mbd-service",
+        "pipeline":
+            "https://github.com/pagopa/pagopa-gps-mbd-service/actions/workflows/cd_release_deploy.yml",
+        "env": "AKS",
+        "actions": "GHA"
+      },
+  ]
 };
 
 const projectsNodo5 = {
