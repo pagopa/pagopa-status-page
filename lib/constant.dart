@@ -279,7 +279,7 @@ const Map<String, List<Map<String, String>>> projectsCore = {
         "env": "AKS",
         "actions": "GHA"
       },
-  ]
+  ],
     "eBollo": [
       {
         "name": "eBollo - MBD Service",
