@@ -305,13 +305,40 @@ const Map<String, List<Map<String, String>>> projectsCore = {
 const projectsNodo5 = {
   "FdR": [
     {
-      "name": "FdR - Nodo dei Pagamenti (New)",
-      "product": "fdrndpnew",
+      "name": "FdR - Fase 1",
+      "product": "fdrfase1",
+      "repository": "pagopa-fdr-nodo-dei-pagamenti",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-nodo-dei-pagamenti/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - Fase 3",
+      "product": "fdrfase3",
       "repository": "pagopa-fdr",
       "pipeline":
-          "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1224",
+          "https://github.com/pagopa/pagopa-fdr/actions/workflows/04_release_deploy.yml",
       "env": "AKS",
-      "actions": "AZDO"
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - Flow to EventHub",
+      "product": "fdr2evh",
+      "repository": "pagopa-fdr-2-event-hub",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-2-event-hub/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - Technical Support",
+      "product": "fdrts",
+      "repository": "pagopa-fdr-technical-support",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-technical-support/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
     },
   ],
   "WISP-Converter": [
