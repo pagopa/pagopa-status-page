@@ -331,6 +331,15 @@ const projectsNodo5 = {
       "env": "AKS",
       "actions": "GHA"
     },
+    {
+      "name": "FdR - Technical Support",
+      "product": "fdrts",
+      "repository": "pagopa-fdr-technical-support",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-technical-support/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
   ],
   "WISP-Converter": [
     {
