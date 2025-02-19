@@ -322,6 +322,15 @@ const projectsNodo5 = {
       "env": "AKS",
       "actions": "GHA"
     },
+    {
+      "name": "FdR - Flow to EventHub",
+      "product": "fdr2evh",
+      "repository": "pagopa-fdr-2-event-hub",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-2-event-hub/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
   ],
   "WISP-Converter": [
     {
