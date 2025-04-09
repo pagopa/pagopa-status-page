@@ -323,11 +323,74 @@ const projectsNodo5 = {
       "actions": "GHA"
     },
     {
-      "name": "FdR - Flow to EventHub",
-      "product": "fdr2evh",
+      "name": "FdR - Fase 3 [Scheduler]",
+      "product": "fdrfase3scheduler",
+      "repository": "pagopa-fdr",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - Flow to EventHub [FdR1 QI Ingestion]",
+      "product": "fdr2evhfdr1",
       "repository": "pagopa-fdr-2-event-hub",
       "pipeline":
           "https://github.com/pagopa/pagopa-fdr-2-event-hub/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - Flow to EventHub [FdR3 QI Ingestion]",
+      "product": "fdr2evhfdr3",
+      "repository": "pagopa-fdr-2-event-hub",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-2-event-hub/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - Flow to EventHub [Recovery QI Ingestion]",
+      "product": "fdr2evhrecovery",
+      "repository": "pagopa-fdr-2-event-hub",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-2-event-hub/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - JSON to XML",
+      "product": "fdrjson2xml",
+      "repository": "pagopa-fdr-json-to-xml",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-json-to-xml/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - XML to JSON [BLOB Trigger]",
+      "product": "fdrxml2jsonblobtrigger",
+      "repository": "pagopa-fdr-xml-to-json",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-xml-to-json/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - XML to JSON [HTTP Trigger]",
+      "product": "fdrxml2jsonhttptrigger",
+      "repository": "pagopa-fdr-xml-to-json",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-xml-to-json/actions/workflows/04_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "FdR - XML to JSON [Queue Trigger]",
+      "product": "fdrxml2jsonqueuetrigger",
+      "repository": "pagopa-fdr-xml-to-json",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-fdr-xml-to-json/actions/workflows/04_release_deploy.yml",
       "env": "AKS",
       "actions": "GHA"
     },
