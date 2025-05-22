@@ -13,15 +13,6 @@ const lastUpdatedKey = "last-updated";
 const Map<String, List<Map<String, String>>> projectsCore = {
   "Api Config": [
     {
-      "name": "ApiConfig - Cacher (Oracle)",
-      "product": "apiconfigcacheo",
-      "repository": "pagopa-api-config-cache",
-      "pipeline":
-          "https://github.com/pagopa/pagopa-api-config-cache/actions/workflows/release_deploy.yml",
-      "env": "AKS",
-      "actions": "GHA"
-    },
-    {
       "name": "ApiConfig - Cacher (Postgres)",
       "product": "apiconfigcachep",
       "repository": "pagopa-api-config-cache",
