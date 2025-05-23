@@ -290,6 +290,17 @@ const Map<String, List<Map<String, String>>> projectsCore = {
         "env": "AKS",
         "actions": "GHA"
       },
+  ],
+  "QI": [
+    {
+      "name": "Observability BDI",
+      "product": "qiobservbdi",
+      "repository": "pagopa-observability-bdi",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-observability-bdi/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    }
   ]
 };
 
