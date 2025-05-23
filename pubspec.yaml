@@ -37,7 +37,7 @@ dependencies:
   http: ^0.13.5
   dio: ^4.0.6
   chaleno: ^0.0.6
-  url_launcher: ^6.1.11
+  url_launcher: ^6.3.1
   font_awesome_flutter: ^10.5.0
   flutter_cache: ^0.1.0
   intl: ^0.18.1
