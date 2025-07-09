@@ -122,9 +122,9 @@ class HomePageState extends State<HomePage> {
   getTab() {
     return IndexedStack(
       index: _selectedIndex,
-      children: const <Widget>[
-        StatusPage(projects: projectsCore),
-        StatusPage(projects: projectsTouchPoint),
+      children: <Widget>[
+        StatusPage.sorted(projects: projectsCore),
+        StatusPage.sorted(projects: projectsTouchPoint),
       ],
     );
   }
