@@ -237,6 +237,15 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "env": "AKS",
       "actions": "GHA"
     },
+    {
+      "name": "GPDxRTP",
+      "product": "gpdrtpservice",
+      "repository": "pagopa-gpd-rtp",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-gpd-rtp/actions/workflows/cd_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
   ],
   "Mocker": [
     {
@@ -260,40 +269,37 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "actions": "GHA"
     },
   ],
-    "OdP": [
-      {
-        "name": "OdP - Payment Options Service",
-        "product": "paymentoptionsservice",
-        "repository": "pagopa-payment-options-service",
-        "pipeline":
-            "https://github.com/pagopa/pagopa-payment-options-service/actions/workflows/release_deploy.yml",
-        "env": "AKS",
-        "actions": "GHA"
-      },
+  "OdP": [
+    {
+      "name": "OdP - Payment Options Service",
+      "product": "paymentoptionsservice",
+      "repository": "pagopa-payment-options-service",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-payment-options-service/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
   ],
-    "eBollo": [
-      {
-        "name": "eBollo - MBD Service",
-        "product": "mbdservice",
-        "repository": "pagopa-mbd-service",
-        "pipeline":
-            "https://github.com/pagopa/pagopa-mbd-service/actions/workflows/release_deploy.yml",
-        "env": "AKS",
-        "actions": "GHA"
-      },
-      {
-        "name": "eBollo - MBD GPS Service",
-        "product": "mbdgpsservice",
-        "repository": "pagopa-gps-mbd-service",
-        "pipeline":
-            "https://github.com/pagopa/pagopa-gps-mbd-service/actions/workflows/cd_release_deploy.yml",
-        "env": "AKS",
-        "actions": "GHA"
-      },
-  ]
-};
-
-const projectsNodo5 = {
+  "@e.Bollo 2.0": [
+    {
+      "name": "eBollo - MBD Service",
+      "product": "mbdservice",
+      "repository": "pagopa-mbd-service",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-mbd-service/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "eBollo - MBD GPS Service",
+      "product": "mbdgpsservice",
+      "repository": "pagopa-gps-mbd-service",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-gps-mbd-service/actions/workflows/cd_release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+  ],
   "FdR": [
     {
       "name": "FdR - Fase 1",
@@ -423,40 +429,6 @@ const projectsNodo5 = {
       "env": "AKS",
       "actions": "GHA"
     },
-  ]
-};
-
-const projectsVAS = {
-  "Back Office": [
-    {
-      "name": "BackOffice pagoPA - BackEnd",
-      "product": "backofficepagopa",
-      "host": "selfcare.%s/ui",
-      "repository": "pagopa-selfcare-ms-backoffice-backend",
-      "pipeline":
-          "https://github.com/pagopa/pagopa-selfcare-ms-backoffice-backend/actions/workflows/release_deploy.yml",
-      "env": "AKS",
-      "actions": "GHA"
-    },
-    {
-      "name": "BackOffice pagoPA - FrontEnd",
-      "type": "frontend",
-      "product": "backofficepagopa-fe",
-      "repository": "pagopa-selfcare-frontend",
-      "pipeline":
-          "https://github.com/pagopa/pagopa-selfcare-frontend/actions/workflows/release_deploy.yml",
-      "env": "AZ",
-      "actions": "GHA"
-    },
-    {
-      "name": "BackOffice External",
-      "product": "backofficeexternalpagopa",
-      "repository": "pagopa-backoffice-external",
-      "pipeline":
-          "https://github.com/pagopa/pagopa-backoffice-external/actions/workflows/release_deploy.yml",
-      "env": "AKS",
-      "actions": "GHA"
-    },
   ],
   "Ricevute PDF": [
     {
@@ -542,16 +514,50 @@ const projectsVAS = {
       "env": "AKS",
       "actions": "GHA"
     },
-  ]
+  ],
+  "Anonymizer": [
+    {
+      "name": "Anonymizer",
+      "product": "anonymizer",
+      "repository": "pagopa-anonymizer",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-anonymizer/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+  ],
 };
 
 const projectsTouchPoint = {
-  "ECommerce": [
+  "Back Office": [
     {
-      "name": "ECommerce - Payment Requests Service",
-      "product": "ecommerce",
-      "repository": "pagopa-ecommerce-payment-requests-service",
-      "pipeline": "",
+      "name": "BackOffice pagoPA - BackEnd",
+      "product": "backofficepagopa",
+      "host": "selfcare.%s/ui",
+      "repository": "pagopa-selfcare-ms-backoffice-backend",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-selfcare-ms-backoffice-backend/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
     },
-  ]
+    {
+      "name": "BackOffice pagoPA - FrontEnd",
+      "type": "frontend",
+      "product": "backofficepagopa-fe",
+      "repository": "pagopa-selfcare-frontend",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-selfcare-frontend/actions/workflows/release_deploy.yml",
+      "env": "AZ",
+      "actions": "GHA"
+    },
+    {
+      "name": "BackOffice External",
+      "product": "backofficeexternalpagopa",
+      "repository": "pagopa-backoffice-external",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-backoffice-external/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+  ],
 };
