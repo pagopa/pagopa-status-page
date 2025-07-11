@@ -11,6 +11,27 @@ class StatusPage extends StatefulWidget {
 
   @override
   StatusPageState createState() => StatusPageState();
+
+  factory StatusPage.sorted({
+    Key? key,
+    required Map<String, List<Map<String, String>>> projects,
+  }) {
+    final sorted = sortProjects(projects);
+    return StatusPage(key: key, projects: sorted);
+  }
+
+  static Map<String, List<Map<String, String>>> sortProjects(
+      Map<String, List<Map<String, String>>> projects) {
+    final projectsSorted = Map.fromEntries(projects.entries
+        .map((e) => MapEntry(
+              e.key,
+              List<Map<String, String>>.from(e.value)
+                ..sort((a, b) => a["name"]!.compareTo(b["name"]!)),
+            ))
+        .toList()
+      ..sort((a, b) => a.key.compareTo(b.key)));
+    return projectsSorted;
+  }
 }
 
 class StatusPageState extends State<StatusPage> {

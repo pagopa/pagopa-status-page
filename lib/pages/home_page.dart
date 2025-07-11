@@ -111,10 +111,8 @@ class HomePageState extends State<HomePage> {
       items: const [
         BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet_rounded), label: "Core"),
-        BottomNavigationBarItem(icon: Icon(Icons.payment), label: "Nodo5"),
-        BottomNavigationBarItem(icon: Icon(Icons.add_circle), label: "VAS"),
-        // BottomNavigationBarItem(
-        //     icon: Icon(Icons.account_balance), label: "TouchPoint"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance), label: "TouchPoint"),
       ],
       currentIndex: _selectedIndex,
       onTap: _onItemTapped,
@@ -124,11 +122,9 @@ class HomePageState extends State<HomePage> {
   getTab() {
     return IndexedStack(
       index: _selectedIndex,
-      children: const <Widget>[
-        StatusPage(projects: projectsCore),
-        StatusPage(projects: projectsNodo5),
-        StatusPage(projects: projectsVAS),
-        // StatusPage(projects: projectsTouchPoint),
+      children: <Widget>[
+        StatusPage.sorted(projects: projectsCore),
+        StatusPage.sorted(projects: projectsTouchPoint),
       ],
     );
   }
@@ -166,30 +162,6 @@ class HomePageState extends State<HomePage> {
       }
     });
     projectsTouchPoint.forEach((namespace, value) {
-      for (var repo in value) {
-        var key1 = "${repo['product']}-info-DEV";
-        var key2 = "${repo['product']}-info-UAT";
-        var key3 = "${repo['product']}-info-PROD";
-        var key4 = "${repo['product']}-release";
-        prefs.remove(key1);
-        prefs.remove(key2);
-        prefs.remove(key3);
-        prefs.remove(key4);
-      }
-    });
-    projectsVAS.forEach((namespace, value) {
-      for (var repo in value) {
-        var key1 = "${repo['product']}-info-DEV";
-        var key2 = "${repo['product']}-info-UAT";
-        var key3 = "${repo['product']}-info-PROD";
-        var key4 = "${repo['product']}-release";
-        prefs.remove(key1);
-        prefs.remove(key2);
-        prefs.remove(key3);
-        prefs.remove(key4);
-      }
-    });
-    projectsNodo5.forEach((namespace, value) {
       for (var repo in value) {
         var key1 = "${repo['product']}-info-DEV";
         var key2 = "${repo['product']}-info-UAT";
