@@ -161,36 +161,9 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "product": "gpdreportinganalysis",
       "repository": "pagopa-gpd-reporting-analysis",
       "pipeline":
-          "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1308",
+          "https://github.com/pagopa/pagopa-gpd-reporting-analysis/actions/workflows/release_deploy.yml",
       "env": "AZ",
       "actions": "AZDO"
-    },
-    {
-      "name": "GPD - Reporting Batch",
-      "product": "gpdreportingbatch",
-      "repository": "pagopa-gpd-reporting-batch",
-      "pipeline":
-          "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1285",
-      "env": "AZ",
-      "actions": "AZDO"
-    },
-    {
-      "name": "GPD - Reporting Service",
-      "product": "gpdreportingservice",
-      "repository": "pagopa-gpd-reporting-service",
-      "pipeline":
-          "https://dev.azure.com/pagopaspa/pagoPA-projects/_build?definitionId=1307",
-      "env": "AZ",
-      "actions": "AZDO"
-    },
-    {
-      "name": "GPD - Reporting Orgs Enrollment",
-      "product": "gpdenrollment",
-      "repository": "pagopa-reporting-orgs-enrollment",
-      "pipeline":
-          "https://github.com/pagopa/pagopa-reporting-orgs-enrollment/actions/workflows/release_deploy.yml",
-      "env": "AKS",
-      "actions": "GHA"
     },
     {
       "name": "GPD - Upload",
