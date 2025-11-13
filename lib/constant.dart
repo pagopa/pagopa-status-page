@@ -432,6 +432,15 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "actions": "GHA"
     },
     {
+      "name": "PDF Receipt - Generator Cart",
+      "product": "receiptpdfgeneratorcart",
+      "repository": "pagopa-receipt-pdf-generator",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-receipt-pdf-generator/actions/workflows/release-deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
       "name": "PDF Receipt - Notifier",
       "product": "receiptpdfnotifier",
       "repository": "pagopa-receipt-pdf-notifier",
