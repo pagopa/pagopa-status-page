@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@1f9a0c22da41e6ebfa534300ef656657ea2c6707
 
       - name: Flutter action ⬇️
-        uses: subosito/flutter-action@v2.19.0
+        uses: subosito/flutter-action@e938fdf56512cc96ef2f93601a5a40bde3801046 # v2.19.0
         with:
           channel: 'stable'
           cache: true
