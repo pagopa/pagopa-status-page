@@ -423,6 +423,15 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "actions": "GHA"
     },
     {
+      "name": "PDF Receipt - Datastore Helpdesk",
+      "product": "receiptpdfdatastorehelpdesk",
+      "repository": "pagopa-receipt-pdf-datastore",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-receipt-pdf-datastore/actions/workflows/release-deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
       "name": "PDF Receipt - Generator",
       "product": "receiptpdfgenerator",
       "repository": "pagopa-receipt-pdf-generator",
@@ -434,6 +443,15 @@ const Map<String, List<Map<String, String>>> projectsCore = {
     {
       "name": "PDF Receipt - Generator Cart",
       "product": "receiptpdfgeneratorcart",
+      "repository": "pagopa-receipt-pdf-generator",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-receipt-pdf-generator/actions/workflows/release-deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
+      "name": "PDF Receipt - Generator Helpdesk",
+      "product": "receiptpdfgeneratorhelpdesk",
       "repository": "pagopa-receipt-pdf-generator",
       "pipeline":
           "https://github.com/pagopa/pagopa-receipt-pdf-generator/actions/workflows/release-deploy.yml",
@@ -459,11 +477,11 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "actions": "GHA"
     },
     {
-      "name": "PDF Receipt - Helpdesk",
-      "product": "receiptpdfhelpdesk",
-      "repository": "pagopa-receipt-pdf-helpdesk",
+      "name": "PDF Receipt - Service Helpdesk",
+      "product": "receiptpdfservicehelpdesk",
+      "repository": "pagopa-receipt-pdf-service",
       "pipeline":
-          "https://github.com/pagopa/pagopa-receipt-pdf-helpdesk/actions/workflows/release_deploy.yml",
+          "https://github.com/pagopa/pagopa-receipt-pdf-service/actions/workflows/release_deploy.yml",
       "env": "AKS",
       "actions": "GHA"
     }
