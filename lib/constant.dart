@@ -365,7 +365,7 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "repository": "pagopa-pdf-engine",
       "pipeline":
           "https://github.com/pagopa/pagopa-pdf-engine/actions/workflows/release-deploy.yml",
-      "env": "AKS",
+      "env": "AZ",
       "actions": "GHA"
     },
     {
@@ -442,6 +442,15 @@ const Map<String, List<Map<String, String>>> projectsCore = {
     }
   ],
   "Stampa Avvisi": [
+      {
+        "name": "PDF Engine",
+        "product": "pdfengineprintit",
+        "repository": "pagopa-pdf-engine",
+        "pipeline":
+            "https://github.com/pagopa/pagopa-pdf-engine/actions/workflows/release-deploy.yml",
+        "env": "AZ",
+        "actions": "GHA"
+      },
     {
       "name": "Print Notice - Service",
       "product": "printpaymentnoticeservice",
