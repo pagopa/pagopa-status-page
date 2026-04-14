@@ -119,6 +119,15 @@ const Map<String, List<Map<String, String>>> projectsCore = {
       "actions": "GHA"
     },
     {
+      "name": "BizEvent - Datastore for view generation",
+      "product": "bizeventsdatastoreview",
+      "repository": "pagopa-biz-events-datastore",
+      "pipeline":
+          "https://github.com/pagopa/pagopa-biz-events-datastore/actions/workflows/release_deploy.yml",
+      "env": "AKS",
+      "actions": "GHA"
+    },
+    {
       "name": "BizEvent - Datastore for negative events",
       "product": "bizeventsdatastoreneg",
       "repository": "pagopa-negative-biz-events-datastore",
