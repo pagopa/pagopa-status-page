@@ -38,31 +38,23 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> addRepo(project) async {
-    var parser = await Chaleno()
-        .load('${apim_u}/shared/statuspage/v1/github/pagopa/${project['repository']}');
-    List<Result>? results = parser?.getElementsByClassName(
-        'css-truncate css-truncate-target text-bold mr-2');
-    var version = results?.first.text ?? 'ERROR';
-    version =
-        version.toLowerCase().replaceAll("release", "").replaceAll(" ", "")
-            .replaceAll("v", "");
-    // final Storage storage = window.localStorage;
-    // http.Response response;
-    // if (storage['gh_token'] != null) {
-    //   response = await http.get(
-    //     Uri.parse(
-    //         'https://api.github.com/repos/pagopa/${project['repository']}/releases/latest'),
-    //     headers: <String, String>{
-    //       'X-GitHub-Api-Version': '2022-11-28',
-    //       'Authorization': 'Bearer ${storage['gh_token']}',
-    //       'Accept': 'application/vnd.github+json'
-    //     },
-    //   ); // there are limitation 60 requests per hour
-    // } else {
-    //   response = await http.get(Uri.parse(
-    //       'https://api.github.com/repos/pagopa/${project['repository']}/releases/latest')); // there are limitation 60 requests per hour
-    // }
-    // var version = jsonDecode(response.body)['tag_name'] ?? 'No Release';
+    final Storage storage = window.localStorage;
+    http.Response response;
+    if (storage['gh_token'] != null) {
+      response = await http.get(
+        Uri.parse(
+            'https://api.github.com/repos/pagopa/${project['repository']}/releases/latest'),
+        headers: <String, String>{
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Authorization': 'Bearer ${storage['gh_token']}',
+          'Accept': 'application/vnd.github+json'
+        },
+      ); // there are limitation 60 requests per hour
+    } else {
+      response = await http.get(Uri.parse(
+          'https://api.github.com/repos/pagopa/${project['repository']}/releases/latest')); // there are limitation 60 requests per hour
+    }
+    var version = jsonDecode(response.body)['tag_name'] ?? 'No Release';
 
     state.repoVersion.update(project['product'], (value) => version,
         ifAbsent: () => version);
