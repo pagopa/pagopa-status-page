@@ -1,18 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:statuspage/bloc/settings/settings_state.dart';
 import 'package:statuspage/bloc/versions/app_cubit.dart';
+import 'package:statuspage/bloc/versions/app_state.dart';
 import 'package:statuspage/constant.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../bloc/settings/settings_cubit.dart';
 
 class TopBar extends AppBar {
-  TopBar(
-      {Key? key,
-      this.withTitle = true,
-      this.switchTheme = true,
-      this.refresh = true});
+  TopBar({
+    super.key,
+    this.withTitle = true,
+    this.switchTheme = true,
+    this.refresh = true,
+  });
 
   final bool withTitle;
   final bool switchTheme;
@@ -31,7 +37,86 @@ class TopBarState extends State<TopBar> {
         if (widget.switchTheme) buildSwitchTheme(),
         if (widget.refresh) buildLastUpdate(),
         if (widget.refresh) buildRefresh(),
+        buildGithubLogin(),
       ],
+    );
+  }
+
+  Widget buildGithubLogin() {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) => IconButton(
+        tooltip:
+            state.githubAuthenticated ? 'GitHub connesso' : 'Accedi con GitHub',
+        onPressed:
+            state.githubAuthenticated ? null : () => openGithubLogin(state),
+        icon: const FaIcon(FontAwesomeIcons.github),
+      ),
+    );
+  }
+
+  Future<void> openGithubLogin(AppState state) async {
+    final cubit = context.read<AppCubit>();
+    if (!state.githubLoginInProgress) {
+      unawaited(cubit.loginWithGithub());
+    }
+
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => BlocListener<AppCubit, AppState>(
+        listenWhen: (previous, current) =>
+            !previous.githubAuthenticated && current.githubAuthenticated,
+        listener: (context, state) => Navigator.of(context).pop(),
+        child: BlocBuilder<AppCubit, AppState>(
+          builder: (context, state) => AlertDialog(
+            title: const Text('Accedi con GitHub'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (state.githubLoginInProgress && state.githubUserCode == null)
+                  const LinearProgressIndicator(),
+                if (state.githubUserCode != null) ...[
+                  Text(state.githubLoginMessage ?? ''),
+                  const SizedBox(height: 12),
+                  SelectableText(
+                    state.githubUserCode!,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  TextButton.icon(
+                    onPressed: state.githubVerificationUri == null
+                        ? null
+                        : () => launchGithubVerification(
+                              state.githubVerificationUri!,
+                            ),
+                    icon: const Icon(Icons.open_in_new),
+                    label: const Text('Apri GitHub'),
+                  ),
+                ] else if (state.githubLoginMessage != null) ...[
+                  Text(state.githubLoginMessage!),
+                ],
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  if (state.githubLoginInProgress) {
+                    context.read<AppCubit>().cancelGithubLogin();
+                  }
+                  Navigator.of(dialogContext).pop();
+                },
+                child: Text(state.githubLoginInProgress ? 'Annulla' : 'Chiudi'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> launchGithubVerification(String uri) async {
+    await launchUrl(
+      Uri.parse(uri),
+      mode: LaunchMode.externalApplication,
     );
   }
 
@@ -40,17 +125,11 @@ class TopBarState extends State<TopBar> {
       padding: const EdgeInsets.all(8.0),
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
-          return Switch(
-            value: state.darkTheme,
-            onChanged: (value) {
-              context.read<SettingsCubit>().toggle();
-            },
-            thumbIcon: MaterialStateProperty.resolveWith((states) {
-              if (!state.darkTheme) {
-                return const Icon(Icons.light_mode);
-              }
-              return const Icon(Icons.dark_mode);
-            }),
+          return IconButton(
+            tooltip:
+                state.darkTheme ? 'Attiva tema chiaro' : 'Attiva tema scuro',
+            onPressed: () => context.read<SettingsCubit>().toggle(),
+            icon: Icon(state.darkTheme ? Icons.dark_mode : Icons.light_mode),
           );
         },
       ),
@@ -59,65 +138,95 @@ class TopBarState extends State<TopBar> {
 
   Padding buildRefresh() {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: IconButton(
-          onPressed: () {
-            updateData();
-          },
-          icon: const Icon(Icons.update),
-        ));
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: BlocBuilder<AppCubit, AppState>(
+        builder: (context, state) => IconButton(
+          tooltip:
+              state.isRefreshing ? 'Aggiornamento in corso' : 'Aggiorna dati',
+          onPressed: state.isRefreshing ? null : updateData,
+          icon: state.isRefreshing
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.refresh),
+        ),
+      ),
+    );
   }
 
   StreamBuilder<String?> buildLastUpdate() {
     return StreamBuilder(
-        stream: asyncPeriodic(const Duration(minutes: 1), (count) async {
-          final SharedPreferences prefs = await SharedPreferences.getInstance();
-          return prefs.getString(lastUpdatedKey);
-        }),
+        stream: lastUpdatedStream(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-                child: Text(
-              "Last updated: now",
-            ));
-          } else {
-            final dateTime = DateTime.parse(snapshot.data);
-            final now = DateTime.now();
-
-            final timeDifference = now.difference(dateTime);
-            return Center(
-                child: Text(
-              "Last updated: ${timeDifference.inMinutes + 1} minutes ago",
-            ));
+          final updatedAt = snapshot.data is String
+              ? DateTime.tryParse(snapshot.data as String)
+              : null;
+          if (updatedAt == null) {
+            return const SizedBox.shrink();
           }
+          final label = _formatElapsed(DateTime.now().difference(updatedAt));
+          final showLabel = MediaQuery.of(context).size.width >= 700;
+          return Center(
+            child: Tooltip(
+              message: label,
+              child: Semantics(
+                label: label,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: showLabel
+                      ? Text(label)
+                      : const Icon(Icons.schedule, size: 20),
+                ),
+              ),
+            ),
+          );
         });
   }
 
-  Stream<T> asyncPeriodic<T>(Duration period, Future<T> Function(int count) f) {
-    return Stream.periodic(period, f).asyncMap((event) async => await event);
+  String _formatElapsed(Duration elapsed) {
+    if (elapsed.inSeconds < 60) {
+      return 'Aggiornato ora';
+    }
+    if (elapsed.inMinutes < 60) {
+      return 'Aggiornato ${elapsed.inMinutes} min fa';
+    }
+    if (elapsed.inHours < 24) {
+      return 'Aggiornato ${elapsed.inHours} ore fa';
+    }
+    return 'Aggiornato ${elapsed.inDays} giorni fa';
   }
 
-  void updateData() {
-    emptyCache();
-    if (context.mounted) {
-      context.read<AppCubit>().empty();
-    }
+  Stream<String?> lastUpdatedStream() async* {
+    final prefs = await SharedPreferences.getInstance();
+    yield prefs.getString(lastUpdatedKey);
+    yield* Stream.periodic(
+      const Duration(minutes: 1),
+      (_) => prefs.getString(lastUpdatedKey),
+    );
+  }
+
+  Future<void> updateData() async {
+    await emptyCache();
+    if (mounted) await context.read<AppCubit>().empty();
   }
 
   Future<void> emptyCache() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    projectsCore.forEach((namespace, value) {
-      for (var repo in value) {
-        var key1 = "${repo['product']}-info-DEV";
-        var key2 = "${repo['product']}-info-UAT";
-        var key3 = "${repo['product']}-info-PROD";
-        var key4 = "${repo['product']}-release";
-        prefs.remove(key1);
-        prefs.remove(key2);
-        prefs.remove(key3);
-        prefs.remove(key4);
+    final keys = <String>{lastUpdatedKey};
+    for (final projects in [projectsCore, projectsTouchPoint]) {
+      for (final teamProjects in projects.values) {
+        for (final project in teamProjects) {
+          final product = project['product'];
+          keys
+            ..add('$product-info-DEV')
+            ..add('$product-info-UAT')
+            ..add('$product-info-PROD')
+            ..add('$product-release');
+        }
       }
-    });
-    prefs.remove(lastUpdatedKey);
+    }
+    await Future.wait(keys.map(prefs.remove));
   }
 }

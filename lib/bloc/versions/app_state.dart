@@ -10,6 +10,7 @@ class AppState {
   bool authPromptVisible;
   bool accessGranted;
   bool githubAuthenticated;
+  bool isRefreshing;
   String? githubUserCode;
   String? githubVerificationUri;
   String? githubLoginMessage;
@@ -26,6 +27,7 @@ class AppState {
     this.authPromptVisible = false,
     this.accessGranted = false,
     this.githubAuthenticated = false,
+    this.isRefreshing = false,
     this.githubUserCode,
     this.githubVerificationUri,
     this.githubLoginMessage,
@@ -43,6 +45,7 @@ class AppState {
     bool? authPromptVisible,
     bool? accessGranted,
     bool? githubAuthenticated,
+    bool? isRefreshing,
     String? githubUserCode,
     String? githubVerificationUri,
     String? githubLoginMessage,
@@ -70,6 +73,7 @@ class AppState {
       authPromptVisible: authPromptVisible ?? this.authPromptVisible,
       accessGranted: accessGranted ?? this.accessGranted,
       githubAuthenticated: githubAuthenticated ?? this.githubAuthenticated,
+      isRefreshing: isRefreshing ?? this.isRefreshing,
       githubUserCode:
           clearGithubLoginData ? null : githubUserCode ?? this.githubUserCode,
       githubVerificationUri: clearGithubLoginData

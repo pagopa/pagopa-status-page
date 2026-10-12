@@ -27,18 +27,17 @@ class NameCell extends StatelessWidget {
     return BlocSelector<AppCubit, AppState, Map<String, String>>(
       selector: (state) => state.repoVersion,
       builder: (context, repoVersion) {
-        if (repoVersion.isNotEmpty) {
-          return Tooltip(
-            message: repoVersion[project['product']] ?? '',
-            child: Text(
-              repoVersion[project['product']] ?? '',
-              overflow: TextOverflow.ellipsis,
-            ),
-          );
+        final version = repoVersion[project['product']];
+        if (version == null || version.isEmpty || version == 'ERROR') {
+          return const SizedBox.shrink();
         }
-        // By default, show a loading spinner.
-        return const SizedBox(
-            height: 20, width: 20, child: CircularProgressIndicator());
+        return Tooltip(
+          message: version,
+          child: Text(
+            version,
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
       },
     );
   }
@@ -54,59 +53,56 @@ class NameCell extends StatelessWidget {
     );
   }
 
-  buildLabelPipe(project) {
+  Widget buildLabelPipe(Map<String, String> project, BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final isGithubActions = project['actions'] == 'GHA';
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color:
-              project['actions'] == 'GHA' ? Colors.black54 : Colors.blue[100],
+      padding: const EdgeInsets.only(right: 8),
+      child: Chip(
+        label: Text(project['actions'] ?? 'TODO'),
+        backgroundColor: isGithubActions
+            ? colors.primaryContainer
+            : colors.secondaryContainer,
+        labelStyle: TextStyle(
+          color: isGithubActions
+              ? colors.onPrimaryContainer
+              : colors.onSecondaryContainer,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Text(
-            project['actions'] ?? 'TODO',
-            style: TextStyle(
-                color: project['actions'] == 'GHA'
-                    ? Colors.white
-                    : Colors.blue[500],
-                fontSize: 12,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
+        visualDensity: VisualDensity.compact,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        side: BorderSide.none,
+        padding: EdgeInsets.zero,
       ),
     );
   }
 
-  buildLabelEnv(project) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color:
-            project['env'] == 'AKS' ? Colors.deepPurple[100] : Colors.blue[100],
+  Widget buildLabelEnv(Map<String, String> project, BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final isAks = project['env'] == 'AKS';
+    return Chip(
+      label: Text(project['env'] ?? 'TODO'),
+      backgroundColor:
+          isAks ? colors.tertiaryContainer : colors.secondaryContainer,
+      labelStyle: TextStyle(
+        color: isAks ? colors.onTertiaryContainer : colors.onSecondaryContainer,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(6.0),
-        child: Text(
-          project['env'] ?? 'TODO',
-          style: TextStyle(
-              color: project['env'] == 'AKS'
-                  ? Colors.deepPurple[500]
-                  : Colors.blue[500],
-              fontSize: 12,
-              fontWeight: FontWeight.bold),
-        ),
-      ),
+      visualDensity: VisualDensity.compact,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      side: BorderSide.none,
+      padding: EdgeInsets.zero,
     );
   }
 
   buildExtraLabel(context) {
     return MediaQuery.of(context).size.width > 450
         ? Row(children: [
-            buildLabelEnv(project),
-            buildLabelPipe(project),
+            buildLabelEnv(project, context),
+            buildLabelPipe(project, context),
           ])
-        : Container();
+        : const SizedBox.shrink();
   }
 }

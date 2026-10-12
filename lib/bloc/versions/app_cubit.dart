@@ -22,9 +22,11 @@ class AppCubit extends Cubit<AppState> {
           prodVersion: prodVersion ?? {},
         ));
 
-  void addAll() {
-    addTeamProject(projectsCore);
-    addTeamProject(projectsTouchPoint);
+  Future<void> addAll() async {
+    await Future.wait([
+      addTeamProject(projectsCore),
+      addTeamProject(projectsTouchPoint),
+    ]);
   }
 
   Future<void> initialize() async {
@@ -118,15 +120,19 @@ class AppCubit extends Cubit<AppState> {
     ));
   }
 
-  void addTeamProject(teamProject) {
+  Future<void> addTeamProject(
+      Map<String, List<Map<String, String>>> teamProject) async {
+    final requests = <Future<void>>[];
     for (var namespace in teamProject.values) {
       for (var project in namespace) {
-        addRepo(project);
-        addDev(project);
-        addUat(project);
-        addProd(project);
+        requests
+          ..add(addRepo(project))
+          ..add(addDev(project))
+          ..add(addUat(project))
+          ..add(addProd(project));
       }
     }
+    await Future.wait(requests);
   }
 
   Future<void> addRepo(project) async {
@@ -346,7 +352,10 @@ class AppCubit extends Cubit<AppState> {
     return emit(state.copyWith(prodVersion: state.prodVersion));
   }
 
-  void empty() {
+  Future<void> empty() async {
+    if (state.isRefreshing) {
+      return;
+    }
     emit(state.copyWith(
       repoVersion: {},
       devVersion: {},
@@ -354,8 +363,13 @@ class AppCubit extends Cubit<AppState> {
       prodVersion: {},
       githubRateLimited: false,
       githubRateLimitBannerDismissed: false,
+      isRefreshing: true,
     ));
-    addAll();
+    try {
+      await addAll();
+    } finally {
+      emit(state.copyWith(isRefreshing: false));
+    }
   }
 
   Future<String> fetchVersion(project, url) {
