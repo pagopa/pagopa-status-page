@@ -3,12 +3,32 @@ class AppState {
   Map<String, String> devVersion;
   Map<String, String> uatVersion;
   Map<String, String> prodVersion;
+  bool githubRateLimited;
+  bool githubRateLimitBannerDismissed;
+  bool githubLoginInProgress;
+  bool authChecking;
+  bool authPromptVisible;
+  bool accessGranted;
+  bool githubAuthenticated;
+  String? githubUserCode;
+  String? githubVerificationUri;
+  String? githubLoginMessage;
 
   AppState({
     required this.repoVersion,
     required this.devVersion,
     required this.uatVersion,
     required this.prodVersion,
+    this.githubRateLimited = false,
+    this.githubRateLimitBannerDismissed = false,
+    this.githubLoginInProgress = false,
+    this.authChecking = true,
+    this.authPromptVisible = false,
+    this.accessGranted = false,
+    this.githubAuthenticated = false,
+    this.githubUserCode,
+    this.githubVerificationUri,
+    this.githubLoginMessage,
   });
 
   AppState copyWith({
@@ -16,6 +36,17 @@ class AppState {
     Map<String, String>? devVersion,
     Map<String, String>? uatVersion,
     Map<String, String>? prodVersion,
+    bool? githubRateLimited,
+    bool? githubRateLimitBannerDismissed,
+    bool? githubLoginInProgress,
+    bool? authChecking,
+    bool? authPromptVisible,
+    bool? accessGranted,
+    bool? githubAuthenticated,
+    String? githubUserCode,
+    String? githubVerificationUri,
+    String? githubLoginMessage,
+    bool clearGithubLoginData = false,
   }) {
     return AppState(
       repoVersion: repoVersion != null
@@ -30,6 +61,22 @@ class AppState {
       prodVersion: prodVersion != null
           ? Map<String, String>.from(prodVersion)
           : this.prodVersion,
+      githubRateLimited: githubRateLimited ?? this.githubRateLimited,
+      githubRateLimitBannerDismissed:
+          githubRateLimitBannerDismissed ?? this.githubRateLimitBannerDismissed,
+      githubLoginInProgress:
+          githubLoginInProgress ?? this.githubLoginInProgress,
+      authChecking: authChecking ?? this.authChecking,
+      authPromptVisible: authPromptVisible ?? this.authPromptVisible,
+      accessGranted: accessGranted ?? this.accessGranted,
+      githubAuthenticated: githubAuthenticated ?? this.githubAuthenticated,
+      githubUserCode:
+          clearGithubLoginData ? null : githubUserCode ?? this.githubUserCode,
+      githubVerificationUri: clearGithubLoginData
+          ? null
+          : githubVerificationUri ?? this.githubVerificationUri,
+      githubLoginMessage: githubLoginMessage ??
+          (clearGithubLoginData ? null : this.githubLoginMessage),
     );
   }
 }

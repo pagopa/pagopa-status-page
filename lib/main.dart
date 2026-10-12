@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => SettingsCubit()..loadSettings(),
         ),
         BlocProvider(
-          create: (BuildContext context) => AppCubit()..addAll(),
+          create: (BuildContext context) => AppCubit()..initialize(),
         ),
       ],
       child: BlocSelector<SettingsCubit, SettingsState, bool>(

@@ -134,6 +134,12 @@ class InfoCell extends StatelessWidget {
   }
 
   Widget buildIcon(String repoVersion, String version) {
+    if (repoVersion == 'ERROR') {
+      return const Tooltip(
+        message: 'Versione del repository non disponibile: limite API GitHub.',
+        child: Icon(Icons.info_outline, color: Colors.orange),
+      );
+    }
     repoVersion = repoVersion.replaceFirst('Release ', '');
     if (compareTo(repoVersion, version) == -1) {
       return const Tooltip(
