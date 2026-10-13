@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:statuspage/bloc/versions/app_state.dart';
 import 'package:statuspage/constant.dart';
+import 'package:web/web.dart' as web;
 
 class AppCubit extends Cubit<AppState> {
-  static const githubClientId = "82d6ebcd7127e50877de";
+  static const githubAuthApiUrl = "https://pagopa-d-weu-shared-status-page.azurewebsites.net/api";
   int _githubLoginAttempt = 0;
 
   AppCubit({
@@ -30,7 +30,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> initialize() async {
-    final token = window.localStorage['gh_token'];
+    final token = web.window.localStorage.getItem('gh_token');
     if (token == null || token.isEmpty) {
       emit(state.copyWith(
         authChecking: false,
@@ -75,7 +75,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   void continueAsGuest() {
-    window.localStorage.remove('gh_token');
+    web.window.localStorage.removeItem('gh_token');
     emit(state.copyWith(
       authChecking: false,
       authPromptVisible: false,
@@ -108,7 +108,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   void _requireGithubLogin(String message) {
-    window.localStorage.remove('gh_token');
+    web.window.localStorage.removeItem('gh_token');
     emit(state.copyWith(
       authChecking: false,
       authPromptVisible: true,
@@ -136,7 +136,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> addRepo(project) async {
-    final token = window.localStorage['gh_token'];
+    final token = web.window.localStorage.getItem('gh_token');
     final response = await http.get(
       Uri.parse(
           'https://api.github.com/repos/pagopa/${project['repository']}/releases/latest'),
@@ -190,11 +190,20 @@ class AppCubit extends Cubit<AppState> {
       return;
     }
     final attempt = ++_githubLoginAttempt;
-    if (githubClientId.isEmpty) {
+    final authApi = Uri.tryParse(githubAuthApiUrl);
+    if (authApi == null ||
+        authApi.host.isEmpty ||
+        authApi.hasQuery ||
+        authApi.hasFragment ||
+        authApi.userInfo.isNotEmpty ||
+        (authApi.scheme != 'https' &&
+            !(authApi.scheme == 'http' &&
+                (authApi.host == 'localhost' ||
+                    authApi.host == '127.0.0.1')))) {
       emit(state.copyWith(
         clearGithubLoginData: true,
         githubLoginMessage:
-            'Login non configurato: impostare GITHUB_CLIENT_ID per la build.',
+            'Login non configurato: impostare GITHUB_AUTH_API_URL per la build (HTTPS, oppure HTTP su localhost).',
       ));
       return;
     }
@@ -205,14 +214,18 @@ class AppCubit extends Cubit<AppState> {
     ));
 
     try {
+      final baseUrl = githubAuthApiUrl.replaceFirst(RegExp(r'/+$'), '');
       final deviceResponse = await http.post(
-        Uri.parse('https://github.com/login/device/code'),
+        Uri.parse('$baseUrl/github/device-code'),
         headers: const {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({'client_id': githubClientId}),
+        body: jsonEncode({}),
       );
+      if (attempt != _githubLoginAttempt) {
+        return;
+      }
       final deviceData = _decodeJsonResponse(deviceResponse);
       if (deviceResponse.statusCode != 200 ||
           deviceData['device_code'] is! String ||
@@ -243,15 +256,13 @@ class AppCubit extends Cubit<AppState> {
           return;
         }
         final tokenResponse = await http.post(
-          Uri.parse('https://github.com/login/oauth/access_token'),
+          Uri.parse('$baseUrl/github/token'),
           headers: const {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
-            'client_id': githubClientId,
             'device_code': deviceCode,
-            'grant_type': 'urn:ietf:params:oauth:grant-type:device_code',
           }),
         );
         if (attempt != _githubLoginAttempt) {
@@ -266,7 +277,7 @@ class AppCubit extends Cubit<AppState> {
             return;
           }
           if (validation.statusCode == 200) {
-            window.localStorage['gh_token'] = token;
+            web.window.localStorage.setItem('gh_token', token);
             _continueWithGithub();
           } else {
             _finishGithubLogin(
@@ -276,10 +287,11 @@ class AppCubit extends Cubit<AppState> {
         }
 
         final error = tokenData['error'];
-        if (error == 'authorization_pending') {
+        if (tokenResponse.statusCode == 200 &&
+            error == 'authorization_pending') {
           continue;
         }
-        if (error == 'slow_down') {
+        if (tokenResponse.statusCode == 200 && error == 'slow_down') {
           interval += 5;
           continue;
         }
@@ -292,9 +304,13 @@ class AppCubit extends Cubit<AppState> {
 
       _finishGithubLogin('Codice scaduto. Avvia nuovamente il login.');
     } on http.ClientException {
-      _finishGithubLogin('Errore di rete durante il login GitHub.');
+      if (attempt == _githubLoginAttempt) {
+        _finishGithubLogin('Errore di rete durante il login GitHub.');
+      }
     } on FormatException {
-      _finishGithubLogin('Risposta non valida dal servizio di login GitHub.');
+      if (attempt == _githubLoginAttempt) {
+        _finishGithubLogin('Risposta non valida dal servizio di login GitHub.');
+      }
     }
   }
 

@@ -35,6 +35,8 @@ migrate_working_dir/
 /build/
 
 # Web related
+functions/node_modules/
+functions/local.settings.json
 
 # Symbolication related
 app.*.symbols

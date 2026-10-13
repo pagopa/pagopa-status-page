@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:web/web.dart' as web;
 
 @deprecated
 class DeployButton extends StatefulWidget {
@@ -19,7 +19,7 @@ class DeployButton extends StatefulWidget {
 }
 
 class DeployButtonState extends State<DeployButton> {
-  final Storage storage = window.localStorage;
+  final web.Storage storage = web.window.localStorage;
 
   final StreamController<String> _refreshController = StreamController();
   late Timer _timer;
@@ -51,7 +51,7 @@ class DeployButtonState extends State<DeployButton> {
   Widget buildButton() {
     return OutlinedButton.icon(
       onPressed: () {
-        if (storage['gh_token'] != null) {
+        if (storage.getItem('gh_token') != null) {
           triggerDeploy();
         } else {
           showAlert();
@@ -89,7 +89,7 @@ class DeployButtonState extends State<DeployButton> {
           'https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/runs'),
       headers: <String, String>{
         'X-GitHub-Api-Version': '2022-11-28',
-        'Authorization': 'Bearer ${storage['gh_token']}',
+        'Authorization': 'Bearer ${storage.getItem('gh_token')}',
         'Accept': 'application/vnd.github+json'
       },
     );
@@ -146,7 +146,7 @@ class DeployButtonState extends State<DeployButton> {
           'https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/workflows'),
       headers: <String, String>{
         'X-GitHub-Api-Version': '2022-11-28',
-        'Authorization': 'Bearer ${storage['gh_token']}',
+        'Authorization': 'Bearer ${storage.getItem('gh_token')}',
         'Accept': 'application/vnd.github+json'
       },
     );
@@ -194,7 +194,7 @@ class DeployButtonState extends State<DeployButton> {
           'https://api.github.com/repos/pagopa/${widget.project['repository']}/actions/workflows/$id/dispatches'),
       headers: <String, String>{
         'X-GitHub-Api-Version': '2022-11-28',
-        'Authorization': 'Bearer ${storage['gh_token']}',
+        'Authorization': 'Bearer ${storage.getItem('gh_token')}',
         'Accept': 'application/vnd.github+json'
       },
       body: jsonEncode(body),

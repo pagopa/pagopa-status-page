@@ -1,0 +1,108 @@
+name: Deploy GitHub auth Function
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'functions/**'
+      - '.github/workflows/deploy-function.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'functions/**'
+      - '.github/workflows/deploy-function.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@1f9a0c22da41e6ebfa534300ef656657ea2c6707
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+
+      - name: Install dependencies and test
+        working-directory: functions
+        run: |
+          npm ci
+          npm test
+
+      - name: Package production dependencies
+        if: github.event_name != 'pull_request'
+        working-directory: functions
+        run: |
+          npm ci --omit=dev
+          zip -q -r ../function.zip host.json package.json package-lock.json src node_modules
+
+      - name: Upload deployment package
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: github-auth-function
+          path: function.zip
+          if-no-files-found: error
+          retention-days: 1
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+      id-token: write
+    concurrency:
+      group: deploy-github-auth-function-production
+      cancel-in-progress: false
+    steps:
+      - name: Validate deployment variables
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+          AZURE_FUNCTION_APP_NAME: ${{ vars.AZURE_FUNCTION_APP_NAME }}
+        run: |
+          : "${AZURE_CLIENT_ID:?Set AZURE_CLIENT_ID in the production environment}"
+          : "${AZURE_TENANT_ID:?Set AZURE_TENANT_ID in the production environment}"
+          : "${AZURE_SUBSCRIPTION_ID:?Set AZURE_SUBSCRIPTION_ID in the production environment}"
+          : "${AZURE_RESOURCE_GROUP:?Set AZURE_RESOURCE_GROUP in the production environment}"
+          : "${AZURE_FUNCTION_APP_NAME:?Set AZURE_FUNCTION_APP_NAME in the production environment}"
+
+      - name: Download deployment package
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: github-auth-function
+          path: deployment
+
+      - name: Azure login with OIDC
+        uses: azure/login@8216e11d8cd9b42fe925c852af8e76311ff067ac # v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Verify existing Function App
+        env:
+          AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+          AZURE_FUNCTION_APP_NAME: ${{ vars.AZURE_FUNCTION_APP_NAME }}
+        run: |
+          az functionapp show \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name "$AZURE_FUNCTION_APP_NAME" \
+            --query id --output tsv
+
+      - name: Deploy Function
+        uses: Azure/functions-action@c27ade7ab0db7a7005f1ee0c6aed9fae27ca4249 # v1
+        with:
+          app-name: ${{ vars.AZURE_FUNCTION_APP_NAME }}
+          package: deployment/function.zip
