@@ -33,6 +33,7 @@ Function in `functions/` forwards only these two operations to fixed GitHub URLs
 | --- | --- | --- |
 | `POST /api/github/device-code` | `{}` | Obtain the user and device codes |
 | `POST /api/github/token` | `{"device_code":"..."}` | Poll for authorization |
+| `GET /info` | — | Anonymous Azure health check |
 
 The frontend retains the existing polling, cancellation and token storage behavior.
 Calls to `api.github.com` still go directly from the browser to GitHub.
