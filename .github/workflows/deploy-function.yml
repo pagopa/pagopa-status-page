@@ -56,12 +56,12 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
-    environment: production
+    environment: dev
     permissions:
       contents: read
       id-token: write
     concurrency:
-      group: deploy-github-auth-function-production
+      group: deploy-github-auth-function-dev
       cancel-in-progress: false
     steps:
       - name: Validate deployment variables
