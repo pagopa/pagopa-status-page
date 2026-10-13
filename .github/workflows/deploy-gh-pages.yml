@@ -38,7 +38,6 @@ jobs:
           cache: true
 
       - name: Build 🔧
-        env:
         run: flutter build web --base-href /pagopa-status-page/
 
       - name: Setup Pages ⚙️
