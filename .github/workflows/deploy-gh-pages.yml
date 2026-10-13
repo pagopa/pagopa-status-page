@@ -39,8 +39,7 @@ jobs:
 
       - name: Build 🔧
         env:
-          GITHUB_AUTH_API_URL: ${{ vars.GITHUB_AUTH_API_URL }}
-        run: flutter build web --base-href /pagopa-status-page/ --dart-define="GITHUB_AUTH_API_URL=$GITHUB_AUTH_API_URL"
+        run: flutter build web --base-href /pagopa-status-page/
 
       - name: Setup Pages ⚙️
         uses: actions/configure-pages@b8130d9ab958b325bbde9786d62f2c97a9885a0e # v3

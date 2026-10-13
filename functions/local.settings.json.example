@@ -1,8 +1,0 @@
-{
-  "IsEncrypted": false,
-  "Values": {
-    "FUNCTIONS_WORKER_RUNTIME": "node",
-    "GITHUB_CLIENT_ID": "82d6ebcd7127e50877de",
-    "ALLOWED_ORIGINS": "https://pagopa.github.io,http://localhost:8888"
-  }
-}

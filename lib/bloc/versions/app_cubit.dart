@@ -7,7 +7,11 @@ import 'package:statuspage/constant.dart';
 import 'package:web/web.dart' as web;
 
 class AppCubit extends Cubit<AppState> {
-  static const githubAuthApiUrl = "https://pagopa-d-weu-shared-status-page.azurewebsites.net/api";
+  static const githubAuthApiUrl =
+      "https://api.dev.platform.pagopa.it/shared/statuspage/v1/auth/device";
+  static const githubClientId = "82d6ebcd7127e50877de";
+  // Empty scope: token limited to public data (enough for public releases).
+  static const githubScope = "";
   int _githubLoginAttempt = 0;
 
   AppCubit({
@@ -203,7 +207,7 @@ class AppCubit extends Cubit<AppState> {
       emit(state.copyWith(
         clearGithubLoginData: true,
         githubLoginMessage:
-            'Login non configurato: impostare GITHUB_AUTH_API_URL per la build (HTTPS, oppure HTTP su localhost).',
+            'Login non configurato.',
       ));
       return;
     }
@@ -216,12 +220,12 @@ class AppCubit extends Cubit<AppState> {
     try {
       final baseUrl = githubAuthApiUrl.replaceFirst(RegExp(r'/+$'), '');
       final deviceResponse = await http.post(
-        Uri.parse('$baseUrl/github/device-code'),
-        headers: const {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+        Uri.parse('$baseUrl/code'),
+        headers: const {'Accept': 'application/json'},
+        body: {
+          'client_id': githubClientId,
+          if (githubScope.isNotEmpty) 'scope': githubScope,
         },
-        body: jsonEncode({}),
       );
       if (attempt != _githubLoginAttempt) {
         return;
@@ -256,14 +260,13 @@ class AppCubit extends Cubit<AppState> {
           return;
         }
         final tokenResponse = await http.post(
-          Uri.parse('$baseUrl/github/token'),
-          headers: const {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
+          Uri.parse('$baseUrl/token'),
+          headers: const {'Accept': 'application/json'},
+          body: {
+            'client_id': githubClientId,
             'device_code': deviceCode,
-          }),
+            'grant_type': 'urn:ietf:params:oauth:grant-type:device_code',
+          },
         );
         if (attempt != _githubLoginAttempt) {
           return;
