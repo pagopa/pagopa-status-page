@@ -119,7 +119,7 @@ class InfoCell extends StatelessWidget {
       -1 => 'Versione installata più recente del repository',
       1 => 'Versione installata meno recente del repository',
       0 => 'Versione allineata al repository',
-      _ => 'Versione installata; confronto col repository non disponibile',
+      _ => 'confronto col repository non disponibile',
     };
     return _CellStatus(
       icon: Row(

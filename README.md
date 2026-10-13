@@ -64,27 +64,22 @@ trailing slashes. The local example permits `https://pagopa.github.io` and
 For automatic deployment to an existing Function App, use
 [Deploy GitHub auth Function](.github/workflows/deploy-function.yml).
 It runs on changes to `functions/` in `main` or manually, with tests only on
-pull requests. Configure the `production` environment variables and Azure OIDC
+pull requests. Configure the `dev` environment variables and Azure OIDC
 identity using the [pipeline setup guide](.azure/pipeline-setup.md).
 
-Use an Azure Function App configured for **Functions runtime v4 and Node.js 22**.
-For an existing app, configure the settings and publish from `functions/`:
+The workflow builds and publishes
+`ghcr.io/pagopa/pagopa-status-page:latest` (and a commit-SHA tag) to GitHub
+Container Registry, then restarts the existing Function App so it pulls the
+updated image. Configure the app as a Linux custom-container Function App and
+select `ghcr.io/pagopa/pagopa-status-page:latest` in Deployment Center. The
+GitHub Container Registry package must be public, or the Function App must have
+credentials to pull the private package.
 
-```shell
-az functionapp config appsettings set \
-  --resource-group <resource-group> --name <function-app> \
-  --settings FUNCTIONS_WORKER_RUNTIME=node \
-    GITHUB_CLIENT_ID=<github-client-id> \
-    ALLOWED_ORIGINS=https://pagopa.github.io
-
-cd functions
-npm ci
-func azure functionapp publish <function-app> --build remote
-```
-
-These commands publish to an existing app; they do not provision Azure resources.
-Remote build installs the production npm dependencies on Azure; local
-`node_modules` is excluded from the deployment archive.
+Set `GITHUB_CLIENT_ID` and `ALLOWED_ORIGINS` in the Function App's application
+settings, along with `FUNCTIONS_WORKER_RUNTIME=node`. The workflow's `dev`
+GitHub environment also needs the Azure OIDC variables documented in the
+[pipeline setup guide](.azure/pipeline-setup.md). It does not provision Azure
+resources.
 The function handles CORS itself, including `OPTIONS`. Leave Azure's platform
 CORS allowlist empty to avoid conflicting headers, and never configure `*`.
 If an existing app already has platform CORS rules, remove them in its Azure

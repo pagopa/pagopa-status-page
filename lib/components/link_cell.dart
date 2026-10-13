@@ -21,7 +21,7 @@ class LinkCell extends StatelessWidget {
           _linkButton(
             context,
             tooltip: 'Repository GitHub',
-            icon: const FaIcon(FontAwesomeIcons.githubAlt),
+            icon: const Icon(Icons.collections_bookmark),
             url: Uri.parse('https://github.com/pagopa/$repository'),
           ),
           _linkButton(
