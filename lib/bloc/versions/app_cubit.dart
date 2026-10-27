@@ -8,7 +8,7 @@ import 'package:web/web.dart' as web;
 
 class AppCubit extends Cubit<AppState> {
   static const githubAuthApiUrl =
-      "https://api.dev.platform.pagopa.it/shared/statuspage/v1/auth/device";
+      "https://api.dev.platform.pagopa.it/shared/statuspage/v1/github";
   static const githubClientId = "82d6ebcd7127e50877de";
   // Empty scope: token limited to public data (enough for public releases).
   static const githubScope = "";
@@ -220,7 +220,7 @@ class AppCubit extends Cubit<AppState> {
     try {
       final baseUrl = githubAuthApiUrl.replaceFirst(RegExp(r'/+$'), '');
       final deviceResponse = await http.post(
-        Uri.parse('$baseUrl/code'),
+        Uri.parse('$baseUrl/login/device/code'),
         headers: const {'Accept': 'application/json'},
         body: {
           'client_id': githubClientId,
@@ -260,7 +260,7 @@ class AppCubit extends Cubit<AppState> {
           return;
         }
         final tokenResponse = await http.post(
-          Uri.parse('$baseUrl/token'),
+          Uri.parse('$baseUrl/login/oauth/access_token'),
           headers: const {'Accept': 'application/json'},
           body: {
             'client_id': githubClientId,
