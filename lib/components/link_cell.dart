@@ -21,13 +21,13 @@ class LinkCell extends StatelessWidget {
           _linkButton(
             context,
             tooltip: 'Repository GitHub',
-            icon: const Icon(Icons.collections_bookmark),
+            icon: Icon(Icons.collections_bookmark, color: colors.tertiary),
             url: Uri.parse('https://github.com/pagopa/$repository'),
           ),
           _linkButton(
             context,
             tooltip: 'Pipeline di deploy',
-            icon: Icon(Icons.rocket_launch, color: colors.tertiary),
+            icon: Icon(Icons.rocket_launch, color: colors.primary),
             url: Uri.parse(project['pipeline'] as String),
           ),
           _linkButton(
